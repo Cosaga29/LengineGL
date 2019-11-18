@@ -4,6 +4,10 @@
 #include "Shader.hpp"
 #include "VertexArray.hpp"
 #include "../Scene.hpp"
+#include "../outside/glm/glm.hpp"
+#include "../outside/glm/gtc/quaternion.hpp"
+#include "../outside/glm/gtx/quaternion.hpp"
+
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 
@@ -44,7 +48,7 @@ private:
 public:
 
 	Renderer();
-	void Draw(const VertexArray& va, const Model& model, const Shader& shader) const;
+	void Draw(const VertexArray& va, unsigned int indicies, const Shader& shader) const;
 	void DrawScene(Scene& scene);
 	void Clear() const;
 

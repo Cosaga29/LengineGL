@@ -7,12 +7,14 @@ layout(location = 1) in vec3 normal;
 
 uniform mat4 rotateZ;
 uniform mat4 rotateX;
-uniform mat4 model_matrix;
-uniform mat4 view_matrix;
-uniform mat4 proj_matrix;
+
+uniform mat4 model_matrix; //NEEDED
+uniform mat4 view_matrix;  //NEEDED
+uniform mat4 proj_matrix;  //NEEDED
 
 out vec3 Normal;
 out vec3 world_pos;
+
 
 void main() {
 

@@ -2,7 +2,7 @@
 
 
 VertexArray::VertexArray() :
-	m_rendererID(0)
+	m_rendererID(0), indicies(0)
 {
 	glGenVertexArrays(1, &m_rendererID);
 }
@@ -17,17 +17,18 @@ void VertexArray::Unbind()
 	glBindVertexArray(0);
 }
 
-void VertexArray::AddModel(Model& model)
+void VertexArray::SetModel(Model* model)
 {
 
-	buffer_models.push_back(model);
-	model.Bind();
+	m_model.reset(model);
+	indicies = model->indicies;
+	model->Bind();
 
 }
 
 void VertexArray::Clear()
 {
 
-	buffer_models.clear();
+	m_model.release();
 
 }

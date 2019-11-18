@@ -3,6 +3,7 @@
 #include <glew.h>
 #include <vector>
 #include "../Model.hpp"
+#include "memory"
 
 
 /*
@@ -14,13 +15,14 @@ class VertexArray
 public:
 
 	unsigned m_rendererID;
-	std::vector<Model>  buffer_models;
+	unsigned int indicies;
+	std::unique_ptr<Model> m_model;
 
 	VertexArray();
 	void Bind();
 	void Unbind();
 
-	void AddModel(Model& model);
+	void SetModel(Model* model);
 	void Clear();
 
 };

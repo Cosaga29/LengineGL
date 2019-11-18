@@ -37,11 +37,11 @@ struct Camera
 	glm::vec3 look_at_pos;
 	glm::vec3 up_axis;
 
-	// Projection
+	// Projection matrix (perspective)
 	float fov;
 	float aspect_ratio;
-	float ZNear;
-	float ZFar;
+	float zNear;
+	float zFar;
 };
 
 struct DiffuseLight
@@ -77,21 +77,20 @@ class Scene
 public:
 
 	//Each object has a vao(vbo + ibo), transformation model and a shader to be used
-	//std::unordered_map<std::string, VertexArray> vao_models;
-
-	//std::unordered_map<std::string, Shader> shaders;
-
 	std::vector<SceneObject> objects_to_render;
+
 	std::unordered_map<std::string, SceneObject*> name_obj_map;
 
 	Scene();
 	Camera m_camera;
 	DiffuseLight m_light;
 
-	bool AddObject(std::string model_file, std::string frag_shader = DEFAULT_FRAG_SHADER, std::string vert_shader = DEFAULT_VERT_SHADER);
-	bool AddShader(std::string frag_shader, std::string vert_shader);
+	//add an object from a model file, a frag and vert shader, and give it a nickname
+	bool AddObject(const std::string& model_file, const std::string& name, const std::string frag_shader = DEFAULT_FRAG_SHADER, const std::string vert_shader = DEFAULT_VERT_SHADER);
+	bool AddShader(std::string& frag_shader, std::string& vert_shader);
+	void SetPerspective(float fov = 90.0f, float aspectRatio = 1.333, float fNear = 0.1f, float fFar = 1000.0f);
 
-	SceneObject* getObjectByName(std::string& object_name);
+	SceneObject* getObjectByName(const std::string& object_name);
 	SceneObject* getObjectById(Object_ID);
 
 	Shader* getShaderById(Shader_ID);
