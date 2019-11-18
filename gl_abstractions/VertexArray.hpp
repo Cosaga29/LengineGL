@@ -1,26 +1,28 @@
 #pragma once
+
+#include <glew.h>
 #include <vector>
-#include "VertexBuffer.hpp"
+#include "../Model.hpp"
 
-class VertexBufferLayout;
 
-class VertexArray {
-
-	unsigned int m_rendererID;
-
-private:
-
-	std::vector<std::pair<VertexBuffer, VertexBufferLayout> > vertexArrays;
+/*
+A vertex array object consists of multiple meshes
+*/
+class VertexArray
+{
 
 public:
 
+	unsigned m_rendererID;
+	std::vector<Model>  buffer_models;
 
 	VertexArray();
-	~VertexArray();
+	void Bind();
+	void Unbind();
 
-	void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
-
-	void Bind() const;
-	void Unbind() const;
+	void AddModel(Model& model);
+	void Clear();
 
 };
+
+

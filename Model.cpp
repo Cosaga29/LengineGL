@@ -2,7 +2,7 @@
 
 
 Model::Model(const char* filename) :
-	stride(0), attributes(0), m_vboBufferID(0), verticies(0), indicies(0), hasTexture(1), hasNormal(1)
+	stride(0), attributes(0), m_vboBufferID(0), m_vbo(0), m_ibo(0), verticies(0), indicies(0), hasTexture(1), hasNormal(1)
 {
 
 	Mesh mesh;

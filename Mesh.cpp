@@ -35,7 +35,7 @@ void Mesh::loadFromObj(const char* filename)
 	std::string mode;
 	if (!inputFile.good())
 	{
-		std::cout << "Cannot open file" << std::endl;
+		std::cout << "In mesh: Cannot open file" << std::endl;
 		return;
 	}
 

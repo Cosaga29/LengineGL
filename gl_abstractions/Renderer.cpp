@@ -18,16 +18,28 @@ bool GLLogError(const char* function, const char* file, int line) {
 	return true;
 }
 
-void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
+Renderer::Renderer()
 {
-	shader.Bind();
-	va.Bind();
-	ib.Bind();
+}
+
+void Renderer::Draw(const VertexArray& va, const Model& model, const Shader& shader) const
+{
+
 	//draws the current bound buffer 
-	GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+	GLCall(glDrawElements(GL_TRIANGLES, model.indicies, GL_UNSIGNED_INT, nullptr));
+}
+
+
+//render scene
+void Renderer::DrawScene(Scene& scene)
+{
+	//loop through every object in the scene and draw it occording to its shader
+
+
 }
 
 void Renderer::Clear() const
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.0, 0.0, 0.0, 1.0); 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

@@ -1,16 +1,21 @@
 #include <chrono>
 
 #include "Application.hpp"
-#include "Mesh.hpp"
-
 #include "Model.hpp"
-
-#include "gl_abstractions/VertexBuffer.hpp"
-#include "gl_abstractions/IndexBuffer.hpp"
-#include "gl_abstractions/Shader.hpp"
+#include "Scene.hpp"
 
 #include "outside/glm/gtc/matrix_transform.hpp"
 #include "outside/glm/gtc/type_ptr.hpp"
+
+#include "gl_abstractions/VertexArray.hpp"
+#include "gl_abstractions/Renderer.hpp"
+#include "gl_abstractions/Shader.hpp"
+
+
+
+
+
+
 
 
 class GraphicsApplication : public Application
@@ -21,11 +26,15 @@ public:
 
 
 	//declare variables here
-	GLuint vao;
-	Mesh testmesh;
-	VertexBuffer* vbo;
-	IndexBuffer* ibo;
+	
+	Scene* scene;
+	Renderer* renderer;
+	
+	//Mesh testmesh;
 
+
+
+	VertexArray* vao;
 	Model* teapot;
 	Shader* teapot_shader;
 
@@ -34,9 +43,6 @@ public:
 	GLint uniTransX;
 
 	//declare variables that make up view transformation
-	glm::vec3 eye_pos;
-	glm::vec3 look_at_pos;
-	glm::vec3 up_axis;
 
 	//declare variable for storing the line from the camera to where its looking
 	glm::vec3 camera_line;
@@ -62,7 +68,7 @@ private:
 
 	virtual inline void updateWindowHeader() override;
 
-	void inline gl_clear() { glClearColor(0.0, 0.0, 0.0, 1.0); glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
+	//void inline gl_clear() { glClearColor(0.0, 0.0, 0.0, 1.0); glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
 	virtual int onCreate() override;
 
@@ -77,9 +83,14 @@ int GraphicsApplication::onCreate()
 
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	//generate vertex array object: holds vertex buffer, shader, and index buffer state
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+
+	scene = new Scene();
+	scene->AddObject("src/teapot_normals.obj", "shaders/frag.shader", "shaders/vert.shader");
+	renderer = new Renderer();
+
+	vao = new VertexArray();
+	vao->Bind();
+
 
 	teapot = new Model("src/teapot_normals.obj");
 	teapot->Bind();
@@ -88,17 +99,13 @@ int GraphicsApplication::onCreate()
 	teapot_shader = new Shader("shaders/frag.shader", "shaders/vert.shader");
 	teapot_shader->Bind();
 
-	//declare variables for starting camera position
-	eye_pos = { 0.0f, 0.0f, 5.0f };
-	look_at_pos = { 0.0f, 0.0f, -1.0f };
-	up_axis = { 0.0f, 1.0f, 0.0f };
 
 	//build proj matrix
 	proj_matrix = glm::perspective(glm::radians(90.0f), ((float)m_windowWidth / m_windowHeight), 0.1f, 1000.0f);
 
 	//build model matrix
 	model_matrix = glm::mat4(1.0f);
-	model_matrix = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 1.0f });
+	model_matrix = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 3.0f });
 
 	//set initial light position
 	light_pos = { 0.0f, 0.0f, -2.0f };
@@ -128,26 +135,24 @@ int GraphicsApplication::onUpdate()
 		frame_end = frame_start;
 
 		//clear screen & depth buffer
-		gl_clear();
+		renderer->Clear();
 
 		//handle user input and mouse pitch yaw
 		processInput(m_window);
 
-		//build camera every frame
+
+
+		//build camera every frame : renderer does this
 		glm::mat4 view_matrix = glm::lookAt(
-			eye_pos,		//position of the camera
-			(eye_pos + look_at_pos),	//point to be at center of screen
-			up_axis			//up axis
+			scene->m_camera.eye_pos,		//position of the camera
+			(scene->m_camera.eye_pos + scene->m_camera.look_at_pos),	//point to be at center of screen
+			scene->m_camera.up_axis				//up axis
 		);
 
-		//calculate the look_at_pos vector depending on the pitch and yaw of the mouse
-		look_at_pos.x = cos(glm::radians(pitch)) * cos((glm::radians(yaw)));
-		look_at_pos.y = sin(glm::radians(pitch));
-		look_at_pos.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-		look_at_pos = glm::normalize(look_at_pos);
 
 
 		//build rotation matricies using time since app started for the theta value
+		//renderer does this
 		glm::mat4 rotateZ = glm::mat4(1.0f);
 		glm::mat4 rotateX = glm::mat4(1.0f);
 		auto now = std::chrono::high_resolution_clock::now();
@@ -170,11 +175,19 @@ int GraphicsApplication::onUpdate()
 
 		
 
-		glDrawElements(GL_TRIANGLES, teapot->indicies, GL_UNSIGNED_INT, 0);
+
+
+
+		renderer->Draw(*vao, *teapot, *teapot_shader);
+
+
+
+
+
+
+
 
 		glfwSwapBuffers(m_window);
-
-
 		updateWindowHeader();
 		glfwPollEvents();
 	}
@@ -198,35 +211,35 @@ void GraphicsApplication::processInput(GLFWwindow* window)
 	//control camera translation
 	if (glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		eye_pos += cameraSpeed * look_at_pos;
+		scene->m_camera.eye_pos += cameraSpeed * scene->m_camera.look_at_pos;
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		eye_pos -= cameraSpeed * look_at_pos;
+		scene->m_camera.eye_pos -= cameraSpeed * scene->m_camera.look_at_pos;
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		eye_pos -= glm::normalize(glm::cross(look_at_pos, up_axis)) * cameraSpeed;
+		scene->m_camera.eye_pos -= glm::normalize(glm::cross(scene->m_camera.look_at_pos, scene->m_camera.up_axis	)) * cameraSpeed;
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		eye_pos += glm::normalize(glm::cross(look_at_pos, up_axis)) * cameraSpeed;
+		scene->m_camera.eye_pos += glm::normalize(glm::cross(scene->m_camera.look_at_pos, scene->m_camera.up_axis	)) * cameraSpeed;
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_R) == GLFW_PRESS)
 	{
-		eye_pos.z += 0.1f;
+		scene->m_camera.eye_pos.z += 0.1f;
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_F) == GLFW_PRESS)
 	{
-		eye_pos.z -= 0.1f;
+		scene->m_camera.eye_pos.z -= 0.1f;
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
-		eye_pos.y -= 0.1f;
+		scene->m_camera.eye_pos.y -= 0.1f;
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		eye_pos.y += 0.1f;
+		scene->m_camera.eye_pos.y += 0.1f;
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS)
 	{
@@ -237,11 +250,11 @@ void GraphicsApplication::processInput(GLFWwindow* window)
 		light_pos.y += 0.1f;
 	}
 
-	//calculate the look_at_pos vector depending on the pitch and yaw of the mouse
-	look_at_pos.x = cos(glm::radians(pitch)) * cos((glm::radians(yaw)));
-	look_at_pos.y = sin(glm::radians(pitch));
-	look_at_pos.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-	look_at_pos = glm::normalize(look_at_pos);
+	//calculate the scene->m_camera.look_at_pos vector depending on the pitch and yaw of the mouse
+	scene->m_camera.look_at_pos.x = cos(glm::radians(pitch)) * cos((glm::radians(yaw)));
+	scene->m_camera.look_at_pos.y = sin(glm::radians(pitch));
+	scene->m_camera.look_at_pos.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+	scene->m_camera.look_at_pos = glm::normalize(scene->m_camera.look_at_pos);
 
 
 }
@@ -255,8 +268,8 @@ inline void GraphicsApplication::updateWindowHeader()
 		std::setw(4) << mouse_x << "] " << "[" <<
 		std::setw(4) << mouse_y << "]   "; // Mouse XY [xxxx] [yyyy]
 	ss << "MN: [" << std::setw(4) << std::setprecision(3) << std::fixed << (mouse_x / m_windowWidth) << "] " << "[" << (mouse_y / m_windowHeight) << "]";	//Mouse Normalized XY: [xxx] [yyy]
-	ss << "  C_Pos: [" << eye_pos.x << ", " << eye_pos.y << ", " << eye_pos.z << "]";
-	ss << "  L_pos: [" << look_at_pos.x << ", " << look_at_pos.y << ", " << look_at_pos.z << "]";
+	ss << "  C_Pos: [" << scene->m_camera.eye_pos.x << ", " << scene->m_camera.eye_pos.y << ", " << scene->m_camera.eye_pos.z << "]";
+	ss << "  L_pos: [" << scene->m_camera.look_at_pos.x << ", " << scene->m_camera.look_at_pos.y << ", " << scene->m_camera.look_at_pos.z << "]";
 
 	glfwSetWindowTitle(m_window, ss.str().c_str());
 	ss.str(std::string());

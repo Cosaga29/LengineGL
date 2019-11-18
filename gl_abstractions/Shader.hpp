@@ -9,6 +9,13 @@
 #include "../outside/glm/glm.hpp"
 #include "../outside/glm/gtc/type_ptr.hpp"
 
+#ifndef DEFAULT_FRAG_SHADER
+#define DEFAULT_FRAG_SHADER "../shaders/default/default_frag.shader"
+#endif
+
+#ifndef DEFAULT_VERT_SHADER
+#define DEFAULT_VERT_SHADER "../shaders/default/default_vert.shader"
+#endif
 
 class Shader {
 private:
@@ -25,7 +32,7 @@ public:
 
 public:
 	//file to read shader data from
-	Shader(const std::string& frag, const std::string& vert);
+	Shader(const std::string& frag = DEFAULT_FRAG_SHADER, const std::string& vert = DEFAULT_VERT_SHADER);
 	~Shader();
 
 	void Bind() const;

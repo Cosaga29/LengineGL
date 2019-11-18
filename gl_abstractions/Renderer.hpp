@@ -1,9 +1,9 @@
 #pragma once
 #include <glew.h>
 #include <string>
-#include "VertexArray.hpp"
-#include "IndexBuffer.hpp"
 #include "Shader.hpp"
+#include "VertexArray.hpp"
+#include "../Scene.hpp"
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 
@@ -18,6 +18,12 @@
 void GLClearError();
 bool GLLogError(const char* function, const char* file, int line);
 
+
+struct DrawContect
+{
+};
+
+
 /*
 Class to handle creation of openGL calls and binds to render data to the screen.
 
@@ -25,7 +31,6 @@ Things needed to draw to screen:
 	VAO -> VBO
 	Index Buffer
 	Shader
-
 
 */
 class Renderer
@@ -38,7 +43,9 @@ private:
 
 public:
 
-	void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+	Renderer();
+	void Draw(const VertexArray& va, const Model& model, const Shader& shader) const;
+	void DrawScene(Scene& scene);
 	void Clear() const;
 
 };
