@@ -1,0 +1,172 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string>
+#include <thread>
+#include <chrono>
+#include <glew.h>
+#include <GLFW/glfw3.h>
+#include <cassert>
+#include "VertexBuffer.hpp"
+#include "IndexBuffer.hpp"
+#include "VertexArray.hpp"
+#include "Renderer.hpp"
+#include "Shader.hpp"
+#include "VertexBufferLayout.hpp"
+#include "Texture.hpp"
+#include "PixelBuffer.hpp"
+#include "PixelDrawer.hpp"
+
+#define ASSERT(x) if (!(x)) __debugbreak();
+
+/*
+/*
+Glew: Provides OpenGL function/symbol/constant declarations in a header file
+
+The implementation of the library, loads the appropiate dll file from the graphics driver
+*/
+
+
+using namespace std::chrono_literals;
+
+int main() {
+
+	srand(time(0));
+
+	/*Window creation*/
+	GLFWwindow* window;
+	if (!glfwInit()) {
+		std::cout << "glfw not initialized" << std::endl;
+		return 0;
+	}
+
+	window = glfwCreateWindow(800, 600, "Test Window", NULL, NULL);
+	if (!window)
+	{
+		std::cout << "Window could not be created." << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
+
+	if (glewInit() != GLEW_OK) {
+		std::cout << "Error!" << std::endl;
+	}
+	std::cout << glGetString(GL_VERSION) << std::endl;
+	/***************************************************************/
+
+
+	//begin scope to clean up classes that encapsulate the openGL buffers
+	{
+
+		PixelBuffer toDraw(800, 600);
+		for (int i = 0; i < toDraw.getSize(); i += 4) {
+			//red channel
+			toDraw.m_data[i] = 0;
+			//green channel
+			toDraw.m_data[i + 1] = 255;
+			//blue channnel
+			toDraw.m_data[i + 2] = 100;
+			//alpha channel
+			toDraw.m_data[i + 3] = 255;
+		}
+
+
+		//position defined by x, y pos
+		float positions[] =
+		{
+			-1.0f,	-1.0f, 0.0f, 0.0f, //0
+			1.0f,	-1.0f, 1.0f, 0.0f, //1
+			1.0f,	1.0f, 1.0f, 1.0f, //2
+			-1.0f,	1.0f, 0.0f, 1.0f //3
+		};
+
+		unsigned int indices[] =
+		{
+			0, 1, 2,
+			2, 3, 0
+		};
+
+		GLCall(glEnable(GL_BLEND));
+		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+		VertexArray va;
+		VertexBuffer vertBuff(positions, sizeof(positions));
+		VertexBufferLayout layout;
+		layout.Push<float>(2);
+		layout.Push<float>(2);
+		va.AddBuffer(vertBuff, layout);
+
+		IndexBuffer indexBuff(indices, sizeof(indices) / sizeof(unsigned int));
+
+		Shader shader("src/frag.shader", "src/vert.shader");
+		shader.Bind();
+		//shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+
+
+		PixelDrawer drawer(toDraw);
+		for (int x = 0; x < toDraw.m_width; x++) {
+			for (int y = 0; y < toDraw.m_height; y++) {
+				drawer.Draw(x, y, PIXEL_BLUE);
+			}
+		}
+
+		drawer.Fill(0, 0, 100, 100, PIXEL_RED);
+		drawer.DrawLine(0, 0, 500, 500, PIXEL_BLACK);
+		drawer.DrawTriangle(0, 0, 500, 500, 500, 0, PIXEL_GREEN);
+		drawer.FillTriangle(0, 0, 500, 500, 500, 0, PIXEL_GREEN);
+
+		//Texture to render
+		Texture testTexture(toDraw.m_data, toDraw.m_width, toDraw.m_height);
+		shader.SetUniform1i("u_Texture", 0);	//set uniform to sample texture at slot 0
+
+		testTexture.Bind();
+		va.Unbind();
+		shader.Unbind();
+		vertBuff.Unbind();
+		indexBuff.Unbind();
+
+		Renderer renderer;
+
+		time_t start, end;
+
+		//Render Loop
+		while (!glfwWindowShouldClose(window))
+		{
+			start = clock();
+			renderer.Clear();
+
+
+
+
+
+			//uniforms are set PER DRAW not PER VERTEX : Uniform is in the fragment shader, so it's being colored PER PIXEL
+			shader.Bind();
+			//draws the current bound buffer 
+			renderer.Draw(va, indexBuff, shader);
+	
+			for (int x = 0; x < toDraw.m_width; x++) {
+				for (int y = 0; y < toDraw.m_height; y++) {
+					unsigned char color[4] = { (rand() % 255), (rand() % 255), (rand() % 255), 255 };
+					drawer.Draw(x, y, color);
+				}
+			}
+
+			testTexture.Refresh();
+
+			glfwSwapBuffers(window);
+			glfwPollEvents();
+
+			double fps = 1/((clock() - start) / (double)CLOCKS_PER_SEC);
+			glfwSetWindowTitle(window, std::to_string(fps).c_str());
+
+			//std::this_thread::sleep_for(0.5s);
+		}
+	}
+
+	glfwDestroyWindow(window);
+	glfwTerminate();
+
+	return 0;
+}

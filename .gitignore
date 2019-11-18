@@ -1,0 +1,10 @@
+Debug/
+dependencies/
+outside/
+Release/
+src/
+.vs/
+res/
+
+*.sln
+*.vcxproj
