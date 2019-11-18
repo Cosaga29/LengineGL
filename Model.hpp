@@ -10,7 +10,8 @@
 Class that contains all necessary information regarding the rendering of an
 object to the screen.
 
-It will consist of the VAO used to bind the state of the draw call.
+Contains the raw information of vertex and index data used by the VAO in a draw call.
+This class is similar to the mesh class, but is lightweight as it only contains the necessary information
 
 */
 class Model

@@ -15,11 +15,15 @@
 
 
 
+/*
+Class for creating a graphics application:
+Consists of three main parts:
+Declare variables to be used in the onUpdate and onCreate methods
 
+onCreate is what is initialized at the beginning of the program
+onUpdate is what is performed every frame while rendering
 
-
-
-
+*/
 class GraphicsApplication : public Application
 {
 public:
@@ -31,11 +35,9 @@ public:
 	Scene* scene;
 	Renderer* renderer;
 
-
+	//NEXT: WORK ON ROTATIONS FOR OBJECTS
 	glm::vec3 light_pos;
-
 	glm::mat4 model_matrix;
-
 
 	float speed = 0.5f;
 
@@ -61,6 +63,7 @@ int GraphicsApplication::onCreate()
 
 	scene = new Scene();
 	scene->AddObject("src/teapot_normals.obj", "teapot", "shaders/frag.shader", "shaders/vert.shader");
+	//scene->AddObject("src/bigger.obj", "teapot", "shaders/frag.shader", "shaders/vert.shader");
 	renderer = new Renderer();
 
 	//set initial light position

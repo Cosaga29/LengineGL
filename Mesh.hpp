@@ -8,6 +8,16 @@
 #include <map>
 #include "outside/glm/glm.hpp"
 
+/*
+Eventually this class will be referred to as the "model loader" as the Model class encapsulates the 
+underlying information needed by the VAO and VBO.
+
+This class still needs to be tested with textures
+
+ONLY USE WITH .OBJ
+*/
+
+
 struct vec3
 {
 	float x, y, z;

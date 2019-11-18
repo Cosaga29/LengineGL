@@ -18,6 +18,34 @@
 #define DEFAULT_VERT_SHADER "../shaders/default/default_vert.shader"
 #endif
 
+
+/*
+
+
+Scene class:
+This class stores the state of the world that will be rendered by the renderer.
+
+The class defines: 
+	transform struct that is used to build the model matrix
+	Camera struct that stores the state of the proj_matrix and view_matrix (perspective and camera)
+	The diffuse light struct stores a light position and color to be used in the world for lighting
+
+The SceneObject:
+	The scene object contains all of the information needed to render an object in the 3D world.
+	The VAO is the openGL VAO, but encapsulated to store the necessary VBO and shader uniforms.
+
+The Scene class works by storing a collection of all scene objects to be rendered.
+A hash map is used to quickly relate the nickname of a model and it's data.
+
+Objects in the scene can have their data modified and accessed:
+scene.objects_to_render[i].transformation.get()->RotationAxis
+scene.objects_to_render[i].transformation.get()->Rotation
+
+
+*/
+
+
+
 //this is the VertexArray's m_rendererID
 typedef unsigned Object_ID;
 typedef unsigned Shader_ID;

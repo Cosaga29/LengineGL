@@ -123,6 +123,8 @@ void Mesh::loadFromObj(const char* filename)
 				break;
 			}
 
+			break;
+
 		case 3: //reading vn
 			ss >> x;
 			ss >> y;
@@ -158,6 +160,8 @@ void Mesh::loadFromObj(const char* filename)
 		hasNormal = 0;
 	}
 
+
+	//TODO: FIX THIS FOR LOADING WITH NO NORMALS
 	if (unique_texture_data.size() == 0)
 	{
 		hasTexture = 0;

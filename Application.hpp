@@ -13,6 +13,12 @@
 #include <sstream>
 #include <iomanip>
 
+/*
+Class that manages a window, mouse and key states.
+This class is designed to be used as an interface; however, I have left some default behavior
+in to remind myself how I build this.
+
+*/
 
 //extern double mouse_x;
 //extern double mouse_y;
