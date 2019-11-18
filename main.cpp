@@ -27,6 +27,7 @@ public:
 	IndexBuffer* ibo;
 
 	Model* teapot;
+	Shader* teapot_shader;
 
 	//method to move the matrix defined in here into the vertex shader
 	GLint uniTransZ;
@@ -83,34 +84,9 @@ int GraphicsApplication::onCreate()
 	teapot = new Model("src/teapot_normals.obj");
 	teapot->Bind();
 
-
-	/*
-	testmesh.loadFromObj("src/teapot_normals.obj");
-	vbo = new VertexBuffer(testmesh.data_out.data(), testmesh.data_out.size() * sizeof(float));
-	vbo->Bind();
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), 0);
-	glEnableVertexAttribArray(0);
-
-	//Load normal data into a vbo and bind it
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-
-	//Load index data from mesh into ibo and bind it
-	ibo = new IndexBuffer(testmesh.out_indicies.data(), testmesh.out_indicies.size());
-	ibo->Bind();
-	*/
-	
-	
-	
 	//load and bind shader
-	Shader gl_shader("src/frag.shader", "src/vert.shader");
-	gl_shader.Bind();
-
-
-	uniTransZ = glGetUniformLocation(gl_shader.m_rendererID, "rotateZ");
-	uniTransX = glGetUniformLocation(gl_shader.m_rendererID, "rotateX");
-
+	teapot_shader = new Shader("shaders/frag.shader", "shaders/vert.shader");
+	teapot_shader->Bind();
 
 	//declare variables for starting camera position
 	eye_pos = { 0.0f, 0.0f, 5.0f };
@@ -124,18 +100,9 @@ int GraphicsApplication::onCreate()
 	model_matrix = glm::mat4(1.0f);
 	model_matrix = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 1.0f });
 
-	//set uniforms to upload matrix data into vertex shader
-	uni_mvp = glGetUniformLocation(gl_shader.m_rendererID, "mvp_matrix");
-	uni_model_matrix = glGetUniformLocation(gl_shader.m_rendererID, "model_matrix");
-	uni_view_matrix = glGetUniformLocation(gl_shader.m_rendererID, "view_matrix");
-	uni_proj_matrix = glGetUniformLocation(gl_shader.m_rendererID, "proj_matrix");
-
-	uni_camera_line = glGetUniformLocation(gl_shader.m_rendererID, "camera_line");
-	uni_light_pos = glGetUniformLocation(gl_shader.m_rendererID, "lightPos");
-
-	//LIGHTING
+	//set initial light position
 	light_pos = { 0.0f, 0.0f, -2.0f };
-	glUniform3fv(uni_light_pos, 1, glm::value_ptr(light_pos));
+	teapot_shader->SetUniform3fv("lightPos", light_pos);
 
 	//enable depth buffer
 	glEnable(GL_DEPTH_TEST);
@@ -173,17 +140,6 @@ int GraphicsApplication::onUpdate()
 			up_axis			//up axis
 		);
 
-		//calculate line from the camera to where its looking
-		camera_line = (eye_pos)-(eye_pos - look_at_pos);
-
-		//pass line to openGL
-		glUniform3fv(uni_camera_line, 1, glm::value_ptr(camera_line));
-
-		//pass light vector to openGL
-		glUniform3fv(uni_light_pos, 1, glm::value_ptr(light_pos));
-
-
-
 		//calculate the look_at_pos vector depending on the pitch and yaw of the mouse
 		look_at_pos.x = cos(glm::radians(pitch)) * cos((glm::radians(yaw)));
 		look_at_pos.y = sin(glm::radians(pitch));
@@ -200,13 +156,17 @@ int GraphicsApplication::onUpdate()
 		rotateX = glm::rotate(rotateX, speed * time * glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 		//upload rotation matrix to gpu for use in vert shader
-		glUniformMatrix4fv(uniTransZ, 1, GL_FALSE, glm::value_ptr(rotateZ)); //how many matricies to upload, matrix should be transposed? last param: converts matrix to 4x4 floats
-		glUniformMatrix4fv(uniTransX, 1, GL_FALSE, glm::value_ptr(rotateX)); //how many matricies to upload, matrix should be transposed? last param: converts matrix to 4x4 floats
+
+		teapot_shader->SetUniformMat4fv("rotateZ", rotateZ);
+		teapot_shader->SetUniformMat4fv("rotateX", rotateX);
+
+		//pass light vector to openGL
+		teapot_shader->SetUniform3fv("lightPos", light_pos);
 
 		//upload view matrix for changes in the vert shader
-		glUniformMatrix4fv(uni_model_matrix, 1, GL_FALSE, glm::value_ptr(model_matrix));
-		glUniformMatrix4fv(uni_view_matrix, 1, GL_FALSE, glm::value_ptr(view_matrix));
-		glUniformMatrix4fv(uni_proj_matrix, 1, GL_FALSE, glm::value_ptr(proj_matrix));
+		teapot_shader->SetUniformMat4fv("model_matrix", model_matrix);
+		teapot_shader->SetUniformMat4fv("view_matrix", view_matrix);
+		teapot_shader->SetUniformMat4fv("proj_matrix", proj_matrix);
 
 		
 
@@ -314,7 +274,5 @@ int main() {
 	GraphicsApplication app(800, 600);
 	app.run();
 
-	//Mesh testmesh;
-	//testmesh.loadFromObj("src/teapot_normals.obj");
 
 }

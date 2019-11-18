@@ -23,6 +23,20 @@ void Shader::Unbind() const
 	GLCall(glUseProgram(0));
 }
 
+void Shader::SetUniformMat4fv(const std::string& name, glm::mat4& matrix_value)
+{
+
+	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix_value)));
+
+}
+
+void Shader::SetUniform3fv(const std::string& name, glm::vec3& vector_value)
+{
+
+	GLCall(glUniform3fv(GetUniformLocation(name), 1, glm::value_ptr(vector_value)));
+
+}
+
 void Shader::SetUniform1i(const std::string& name, int value)
 {
 	GLCall(glUniform1i(GetUniformLocation(name), value));
@@ -121,11 +135,15 @@ int Shader::GetUniformLocation(const std::string& name)
 {
 	//if location is not found
 	if (m_uniformLocation.find(name) == m_uniformLocation.end()) {
+
 		GLCall(int location = glGetUniformLocation(m_rendererID, name.c_str()));
 		m_uniformLocation.insert(std::pair<std::string, int>({ name, location }));
+
+		//error creating location, or name doesnt exist
 		if (location == -1) {
 			std::cout << "Uniform: " << name << " doesn't exist." << std::endl;
 		}
+
 		return location;
 	}
 	else {
