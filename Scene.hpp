@@ -58,6 +58,11 @@ struct Transform
 		translation = { 0.0f, 0.0f, 0.0f };
 	}
 
+	//quaternion math: http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-17-quaternions/
+	inline void RotateX(const float& degrees) { this->rotationAxis = { 1.0f, 0.0f, 0.0f }; this->rotationQuat *= glm::angleAxis(glm::degrees(degrees), this->rotationAxis); }
+	inline void RotateY(const float& degrees) { this->rotationAxis = { 0.0f, 1.0f, 0.0f }; this->rotationQuat *= glm::angleAxis(glm::degrees(degrees), this->rotationAxis); }
+	inline void RotateZ(const float& degrees) { this->rotationAxis = { 0.0f, 0.0f, 1.0f }; this->rotationQuat *= glm::angleAxis(glm::degrees(degrees), this->rotationAxis); }
+
 	glm::vec3 scale;
 	glm::vec3 rotationAxis;
 	glm::quat rotationQuat;
@@ -122,7 +127,7 @@ public:
 	DiffuseLight m_light;
 
 	//add an object from a model file, a frag and vert shader, and give it a nickname
-	bool LoadObject(const std::string& model_file, const std::string& name, const std::string frag_shader = DEFAULT_FRAG_SHADER, const std::string vert_shader = DEFAULT_VERT_SHADER);
+	bool LoadObject(const std::string& model_file, const std::string& name, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
 	bool AddObject(const std::string& name);
 	bool RemoveObject(const std::string& name);
 

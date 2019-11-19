@@ -65,11 +65,11 @@ int GraphicsApplication::onCreate()
 	renderer = new Renderer();
 	
 	//separate loading and adding to a scene
-	scene->LoadObject("src/teapot_normals.obj", "teapot");
+	//scene->LoadObject("src/teapot_normals.obj", "teapot");
 	scene->LoadObject("src/bigger.obj", "deer");
 
-	scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
-	scene->getObjectByName("deer")->transformation.get()->translation = { 0.0f, -12.0f, 0.0f };
+	//scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
+	scene->getObjectByName("deer")->transformation.get()->translation = { 0.0f, 0.0f, 2.0f };
 	
 	scene->AddObject("deer");
 	scene->AddObject("teapot");
@@ -113,10 +113,8 @@ int GraphicsApplication::onUpdate()
 
 		//create euler angle for rotation
 		//rotate the deer
-		glm::vec3 rotAxis = scene->getObjectByName("deer")->transformation.get()->rotationAxis;
-		glm::quat myquat = glm::angleAxis(glm::degrees(0.001f), rotAxis);
-		scene->getObjectByName("deer")->transformation.get()->rotationQuat *=  myquat;
-
+		scene->getObjectByName("deer")->transformation.get()->RotateX(0.015 * frame_time);
+		scene->getObjectByName("deer")->transformation.get()->RotateY(0.015 * frame_time);
 
 
 		//pass the scene to the renderer to draw
