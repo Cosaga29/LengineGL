@@ -2,18 +2,16 @@
 
 #include <chrono>
 
-#include "Application.hpp"
-#include "Model.hpp"
-#include "Scene.hpp"
-
 #include "outside/glm/gtc/matrix_transform.hpp"
 #include "outside/glm/gtc/type_ptr.hpp"
 
 #include "gl_abstractions/VertexArray.hpp"
-#include "gl_abstractions/Renderer.hpp"
 #include "gl_abstractions/Shader.hpp"
 
-
+#include "Renderer.hpp"
+#include "Application.hpp"
+#include "Model.hpp"
+#include "Scene.hpp"
 
 /*
 Class for creating a graphics application:
@@ -61,6 +59,8 @@ int GraphicsApplication::onCreate()
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	scene = new Scene();
+	
+	//separate loading and adding to a scene
 	scene->AddObject("src/teapot_normals.obj", "teapot", "shaders/frag.shader", "shaders/vert.shader");
 	scene->AddObject("src/bigger.obj", "deer", "shaders/frag.shader", "shaders/vert.shader");
 
@@ -109,7 +109,6 @@ int GraphicsApplication::onUpdate()
 		scene->getObjectByName("deer")->shader->SetUniform3fv("lightPos", light_pos);
 
 		renderer->DrawScene(*scene);
-
 
 
 		glfwSwapBuffers(m_window);

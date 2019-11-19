@@ -1,6 +1,8 @@
 #pragma once
-#include "Renderer.hpp"
+
 #include <iomanip>
+
+#include "GLLogger.hpp"
 
 class Texture {
 

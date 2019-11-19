@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <cassert>
 #include "glew.h"
-#include "Renderer.hpp"
+#include "GLLogger.hpp"
 
 //TODO: Decide if using chars or unsigned int
 

@@ -44,8 +44,6 @@ scene.objects_to_render[i].transformation.get()->Rotation
 
 */
 
-
-
 //this is the VertexArray's m_rendererID
 typedef unsigned Object_ID;
 typedef unsigned Shader_ID;

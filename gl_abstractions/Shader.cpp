@@ -1,5 +1,5 @@
 #include "Shader.hpp"
-#include "Renderer.hpp"
+#include "GLLogger.hpp"
 #pragma once
 
 Shader::Shader(const std::string& frag, const std::string& vert) :

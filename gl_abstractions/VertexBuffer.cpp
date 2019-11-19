@@ -1,7 +1,4 @@
 #include "VertexBuffer.hpp"
-#include <glew.h>
-#include "Renderer.hpp"
-
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size) 
 {

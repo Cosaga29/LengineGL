@@ -1,5 +1,8 @@
 #pragma once
 
+#include <glew.h>
+#include "GLLogger.hpp"
+
 class VertexBuffer {
 
 public:

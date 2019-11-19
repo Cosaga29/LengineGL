@@ -1,12 +1,16 @@
 #pragma once
 #include <glew.h>
 #include <string>
-#include "Shader.hpp"
-#include "VertexArray.hpp"
-#include "../Scene.hpp"
-#include "../outside/glm/glm.hpp"
-#include "../outside/glm/gtc/quaternion.hpp"
-#include "../outside/glm/gtx/quaternion.hpp"
+
+#include "outside/glm/glm.hpp"
+#include "outside/glm/gtc/quaternion.hpp"
+#include "outside/glm/gtx/quaternion.hpp"
+
+#include "gl_abstractions/GLLogger.hpp"
+#include "gl_abstractions/Shader.hpp"
+#include "gl_abstractions/VertexArray.hpp"
+#include "Scene.hpp"
+
 
 
 
