@@ -16,6 +16,28 @@
 #include "Model.hpp"
 #include "Scene.hpp"
 
+
+
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key != GLFW_KEY_LEFT_ALT || action == GLFW_RELEASE) { return; }
+	Application* this_app = (Application*)glfwGetWindowUserPointer(window);
+	if (this_app->cursor_disabled)
+	{
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	else
+	{
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+	this_app->cursor_disabled = !this_app->cursor_disabled;
+}
+
+
+
+
+
 /*
 Class for creating a graphics application:
 Consists of three main parts:
@@ -30,7 +52,6 @@ class GraphicsApplication : public Application
 public:
 	GraphicsApplication(int width, int height) :
 		Application(width, height) {}
-
 
 	//declare variables here
 	Scene* scene;
@@ -60,6 +81,7 @@ int GraphicsApplication::onCreate()
 {
 
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetKeyCallback(m_window, key_callback);
 
 	scene = new Scene();
 	renderer = new Renderer();
@@ -110,7 +132,6 @@ int GraphicsApplication::onUpdate()
 		//handle user input and mouse pitch yaw
 		processInput(m_window);
 
-		//create euler angle for rotation
 		//rotate the deer
 		scene->getObjectByName("deer")->transformation.get()->RotateX(0.015 * frame_time);
 		scene->getObjectByName("deer")->transformation.get()->RotateY(0.015 * frame_time);
@@ -133,6 +154,10 @@ int GraphicsApplication::onUpdate()
 
 void GraphicsApplication::processInput(GLFWwindow* window) 
 {
+	if (!cursor_disabled)
+	{
+		return;
+	}
 
 	float cameraSpeed = 7.0f * frame_time;
 	if (glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -181,6 +206,7 @@ void GraphicsApplication::processInput(GLFWwindow* window)
 	{
 		scene->m_light.position.y -= 0.1f;
 	}
+
 
 
 	//calculate the scene->m_camera.look_at_pos vector depending on the pitch and yaw of the mouse

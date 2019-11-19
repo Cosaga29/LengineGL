@@ -36,6 +36,7 @@ public:
 	float yaw;
 	float pitch;
 	float roll;
+	bool cursor_disabled = true;
 
 protected:
 
