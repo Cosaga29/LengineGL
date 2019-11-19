@@ -18,6 +18,7 @@ ONLY USE WITH .OBJ
 */
 
 
+
 struct vec3
 {
 	float x, y, z;
@@ -34,11 +35,27 @@ struct packedVertex
 	vec3 position;
 	vec2 texture;
 	vec3 normal;
-	bool operator<(const packedVertex v2) const 
+	bool operator<(const packedVertex v2) const
 	{
 		return memcmp((void*)this, &v2, sizeof(vec3) + sizeof(vec2) + sizeof(vec3)) > 0;
 	};
 };
+
+
+struct gl_data
+{
+	gl_data() { size = 0; stride = 0; attributes = 0; indicies = 0; hasTexture = 0; hasNormal = 0; }
+
+	unsigned int size;	//size in bytes
+	unsigned int stride;	//stride of the data
+	unsigned int attributes;	//how many different attributes were read
+	unsigned int indicies;		//number of indicies reawd
+	bool hasTexture;
+	bool hasNormal;
+	std::vector<float> data_out;	//raw data ready for VBO
+	std::vector<unsigned int> out_indicies;	//raw index data for IBO
+};
+
 
 
 class Mesh
@@ -67,6 +84,6 @@ public:
 
 	Mesh();
 
-	void loadFromObj(const char* filepath);
+	gl_data* loadFromObj(const char* filepath);
 	
 };

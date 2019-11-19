@@ -3,6 +3,7 @@
 #include "gl_abstractions/VertexBuffer.hpp"
 #include "gl_abstractions/IndexBuffer.hpp"
 #include "Mesh.hpp"
+#include "memory"
 
 
 
@@ -27,7 +28,7 @@ private:
 	VertexBuffer* m_vbo;
 	IndexBuffer* m_ibo;
 
-	int generateLayout();
+	int generateLayout(gl_data* file_data);
 
 
 public:

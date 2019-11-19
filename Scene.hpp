@@ -3,12 +3,13 @@
 #include <unordered_map>
 #include <memory>
 #include <glew.h>
-
+#include "outside/glm/glm.hpp"
 #include "outside/glm/gtc/matrix_transform.hpp"
 #include "outside/glm/gtc/type_ptr.hpp"
 #include "outside/glm/gtc/quaternion.hpp"
-#include "gl_abstractions/VertexArray.hpp"
+#include "outside/glm/gtx/quaternion.hpp"
 #include "gl_abstractions/Shader.hpp"
+#include "gl_abstractions/VertexArray.hpp"
 
 #ifndef DEFAULT_FRAG_SHADER
 #define DEFAULT_FRAG_SHADER "shaders/default/default_frag.shader"
@@ -19,30 +20,7 @@
 #endif
 
 
-/*
 
-
-Scene class:
-This class stores the state of the world that will be rendered by the renderer.
-
-The class defines: 
-	transform struct that is used to build the model matrix
-	Camera struct that stores the state of the proj_matrix and view_matrix (perspective and camera)
-	The diffuse light struct stores a light position and color to be used in the world for lighting
-
-The SceneObject:
-	The scene object contains all of the information needed to render an object in the 3D world.
-	The VAO is the openGL VAO, but encapsulated to store the necessary VBO and shader uniforms.
-
-The Scene class works by storing a collection of all scene objects to be rendered.
-A hash map is used to quickly relate the nickname of a model and it's data.
-
-Objects in the scene can have their data modified and accessed:
-scene.objects_to_render[i].transformation.get()->RotationAxis
-scene.objects_to_render[i].transformation.get()->Rotation
-
-
-*/
 
 //this is the VertexArray's m_rendererID
 typedef unsigned Object_ID;
@@ -94,7 +72,7 @@ struct DiffuseLight
 Each object passed to the renderer will have a
 	vao for vbo/ibo information
 	transformation matrix (model matrix)
-	Shader to be used 
+	Shader to be used
 */
 struct SceneObject
 {
@@ -105,6 +83,32 @@ struct SceneObject
 	std::unique_ptr<Transform> transformation;
 	std::unique_ptr<Shader> shader;
 };
+
+
+/*
+
+
+Scene class:
+This class stores the state of the world that will be rendered by the renderer.
+
+The class defines: 
+	transform struct that is used to build the model matrix
+	Camera struct that stores the state of the proj_matrix and view_matrix (perspective and camera)
+	The diffuse light struct stores a light position and color to be used in the world for lighting
+
+The SceneObject:
+	The scene object contains all of the information needed to render an object in the 3D world.
+	The VAO is the openGL VAO, but encapsulated to store the necessary VBO and shader uniforms.
+
+The Scene class works by storing a collection of all scene objects to be rendered.
+A hash map is used to quickly relate the nickname of a model and it's data.
+
+Objects in the scene can have their data modified and accessed:
+scene.objects_to_render[i].transformation.get()->RotationAxis
+scene.objects_to_render[i].transformation.get()->Rotation
+
+
+*/
 
 
 /*

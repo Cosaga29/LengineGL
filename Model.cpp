@@ -6,40 +6,22 @@ Model::Model(const char* filename) :
 {
 
 	Mesh mesh;
-	mesh.loadFromObj(filename);
-	vbo_data = mesh.data_out;
-	ibo_data = mesh.out_indicies;
+	std::unique_ptr<gl_data> file_data(mesh.loadFromObj(filename));
 
-	stride = 8;
-	attributes = 3;
 
-	if (!mesh.hasNormal)
-	{
-		hasNormal = false;
-		stride -= 3; // no xyz for normal
-		attributes--;
-	}
-	if (!mesh.hasTexture)
-	{
-		hasTexture = false;
-		stride -= 2; //no uv
-		attributes--;
-	}
-
-	m_vbo = new VertexBuffer(vbo_data.data(), vbo_data.size() * sizeof(float));
+	m_vbo = new VertexBuffer(file_data->data_out.data(), file_data->size);
 	m_vboBufferID = m_vbo->m_bufferID;
 
-	if (!generateLayout())
+	if (!generateLayout(file_data.get()))
 	{
 		std::cout << "Error generating attributes..." << std::endl;
 		return;
 	}
 
-	m_ibo = new IndexBuffer(ibo_data.data(), ibo_data.size());
+	m_ibo = new IndexBuffer(file_data->out_indicies.data(), file_data->out_indicies.size());
 
-	verticies = vbo_data.size();
-	indicies = ibo_data.size();
-
+	verticies = file_data->out_indicies.size();
+	indicies = file_data->out_indicies.size();
 
 }
 
@@ -53,25 +35,25 @@ glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), 0);
 glEnableVertexAttribArray(0);
 */
 
-int Model::generateLayout()
+int Model::generateLayout(gl_data* file_data)
 {
 
 	//set attrib pointer for position data in vbo
 	int attributes_bound = 0;
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride * sizeof(float), 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, file_data->stride * sizeof(float), 0);
 	glEnableVertexAttribArray(0);
 	attributes_bound++;
 
-	if (hasTexture)
+	if (file_data->hasTexture)
 	{
-		glVertexAttribPointer(attributes_bound, 2, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void*)(2 * sizeof(float)));
+		glVertexAttribPointer(attributes_bound, 2, GL_FLOAT, GL_FALSE, file_data->stride * sizeof(float), (void*)(2 * sizeof(float)));
 		glEnableVertexAttribArray(attributes_bound);
 		attributes_bound++;
 	}
 
-	if (hasNormal)
+	if (file_data->hasNormal)
 	{
-		glVertexAttribPointer(attributes_bound, 3, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void*)(3 * sizeof(float)));
+		glVertexAttribPointer(attributes_bound, 3, GL_FLOAT, GL_FALSE, file_data->stride * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(attributes_bound);
 		attributes_bound++;
 	}

@@ -2,15 +2,6 @@
 
 #include <chrono>
 
-#include "outside/glm/glm.hpp"
-#include "outside/glm/gtc/matrix_transform.hpp"
-#include "outside/glm/gtc/type_ptr.hpp"
-#include "outside/glm/gtc/quaternion.hpp"
-#include "outside/glm/gtx/quaternion.hpp"
-
-#include "gl_abstractions/VertexArray.hpp"
-#include "gl_abstractions/Shader.hpp"
-
 #include "Renderer.hpp"
 #include "Application.hpp"
 #include "Model.hpp"
@@ -88,7 +79,7 @@ int GraphicsApplication::onCreate()
 	
 	//separate loading and adding to a scene
 	//scene->LoadObject("src/teapot_normals.obj", "teapot");
-	scene->LoadObject("src/bigger.obj", "deer");
+	scene->LoadObject("src/testteapot.obj", "deer");
 
 	//scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
 	scene->getObjectByName("deer")->transformation.get()->translation = { 0.0f, 0.0f, 2.0f };
@@ -133,8 +124,9 @@ int GraphicsApplication::onUpdate()
 		processInput(m_window);
 
 		//rotate the deer
-		scene->getObjectByName("deer")->transformation.get()->RotateX(0.015 * frame_time);
-		scene->getObjectByName("deer")->transformation.get()->RotateY(0.015 * frame_time);
+		scene->getObjectByName("deer")->transformation.get()->RotateX(0.015f * frame_time);
+		scene->getObjectByName("deer")->transformation.get()->RotateY(0.015f * frame_time);
+		scene->getObjectByName("deer")->transformation.get()->RotateZ(0.015f * frame_time);
 
 		//pass the scene to the renderer to draw
 		renderer->DrawScene(*scene);

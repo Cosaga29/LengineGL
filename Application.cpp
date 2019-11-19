@@ -2,7 +2,7 @@
 
 
 Application::Application(int width, int height) :
-	mouse_x(0), mouse_y(0), sensitivity(0.10), yaw(0), pitch(0), roll(0),
+	mouse_x(0), mouse_y(0), sensitivity(0.10f), yaw(0), pitch(0), roll(0),
 	m_windowWidth(width), m_windowHeight(height), frame_time(0), good(true), m_window(0), last_frame(0)
 {
 	bool init = true;

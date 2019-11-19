@@ -27,8 +27,11 @@ Mesh::Mesh()
 }
 
 
-void Mesh::loadFromObj(const char* filename)
+gl_data* Mesh::loadFromObj(const char* filename)
 {
+	gl_data* to_return = new gl_data();
+
+
 
 	std::string buffer;
 	std::ifstream inputFile(filename);
@@ -36,7 +39,8 @@ void Mesh::loadFromObj(const char* filename)
 	if (!inputFile.good())
 	{
 		std::cout << "In mesh: Cannot open file" << std::endl;
-		return;
+		delete to_return;
+		return 0;
 	}
 
 	std::map<std::string, int> mode_map;
@@ -151,20 +155,45 @@ void Mesh::loadFromObj(const char* filename)
 	std::vector<vec2> raw_texture;
 	std::vector<vec3> raw_normal;
 
+	if (unique_position_data.size() == 0)
+	{
+		std::cout << "No positions read..." << std::endl;
+	}
+	else
+	{
+		to_return->stride += 3;
+		to_return->attributes++;
+	}
+
 	if (unique_texture_data.size() == 0)
 	{
 		hasTexture = 0;
+		to_return->hasTexture = 0;
+	}
+	else 
+	{
+		hasTexture = 1;
+		to_return->hasTexture = 1;
+		to_return->stride += 2;
+		to_return->attributes++;
 	}
 	if (unique_normal_data.size() == 0)
 	{
 		hasNormal = 0;
+		to_return->hasNormal = 0;
+	}
+	else
+	{
+		hasNormal = 1;
+		to_return->hasNormal = 1;
+		to_return->stride += 3;
+		to_return->attributes++;
 	}
 
 
 	//TODO: FIX THIS FOR LOADING WITH NO NORMALS
-	if (unique_texture_data.size() == 0)
+	if (!hasTexture)
 	{
-		hasTexture = 0;
 		//only expand positon and normals
 		for (unsigned i = 0; i < pos_index.size(); i++)
 		{
@@ -180,7 +209,7 @@ void Mesh::loadFromObj(const char* filename)
 			unsigned result;
 			if (contains(vert_map, pv, result)) 
 			{
-				out_indicies.push_back(result);
+				to_return->out_indicies.push_back(result);
 			}
 			else
 			{
@@ -188,7 +217,7 @@ void Mesh::loadFromObj(const char* filename)
 				out_textures.push_back({ 0.0f, 0.0f });
 				out_normals.push_back(raw_normal[i]);
 				unsigned newIndexForMap = out_positions.size() - 1;
-				out_indicies.push_back(newIndexForMap);
+				to_return->out_indicies.push_back(newIndexForMap);
 				vert_map[pv] = newIndexForMap;
 			}
 			
@@ -196,15 +225,15 @@ void Mesh::loadFromObj(const char* filename)
 
 
 		//build final packed raw vector of floats for openGL to load from
-		for (int i = 0; i < out_positions.size(); i++)
+		for (unsigned i = 0; i < out_positions.size(); i++)
 		{
-			data_out.push_back(out_positions[i].x);
-			data_out.push_back(out_positions[i].y);
-			data_out.push_back(out_positions[i].z);
-
-			data_out.push_back(out_normals[i].x);
-			data_out.push_back(out_normals[i].y);
-			data_out.push_back(out_normals[i].z);
+			to_return->data_out.push_back(out_positions[i].x);
+			to_return->data_out.push_back(out_positions[i].y);
+			to_return->data_out.push_back(out_positions[i].z);
+					 
+			to_return->data_out.push_back(out_normals[i].x);
+			to_return->data_out.push_back(out_normals[i].y);
+			to_return->data_out.push_back(out_normals[i].z);
 		}
 
 
@@ -214,7 +243,7 @@ void Mesh::loadFromObj(const char* filename)
 	{
 		hasTexture = 1;
 		//expand position, texture, and normals
-		for (int i = 0; i < pos_index.size(); i++)
+		for (unsigned i = 0; i < pos_index.size(); i++)
 		{
 			raw_position.push_back(unique_position_data[pos_index[i]]);
 			raw_normal.push_back(unique_normal_data[normal_index[i]]);
@@ -229,7 +258,7 @@ void Mesh::loadFromObj(const char* filename)
 			unsigned result;
 			if (contains(vert_map, pv, result))
 			{
-				out_indicies.push_back(result);
+				to_return->out_indicies.push_back(result);
 			}
 			else
 			{
@@ -237,7 +266,7 @@ void Mesh::loadFromObj(const char* filename)
 				out_textures.push_back(raw_texture[i]);
 				out_normals.push_back(raw_normal[i]);
 				unsigned newIndexForMap = out_positions.size() - 1;
-				out_indicies.push_back(newIndexForMap);
+				to_return->out_indicies.push_back(newIndexForMap);
 				vert_map[pv] = newIndexForMap;
 			}
 
@@ -245,20 +274,24 @@ void Mesh::loadFromObj(const char* filename)
 
 
 		//build final packed raw vector of floats for openGL to load from
-		for (int i = 0; i < out_positions.size(); i++)
+		for (unsigned i = 0; i < out_positions.size(); i++)
 		{
-			data_out.push_back(out_positions[i].x);
-			data_out.push_back(out_positions[i].y);
-			data_out.push_back(out_positions[i].z);
-
-			data_out.push_back(out_textures[i].u);
-			data_out.push_back(out_textures[i].v);
-
-			data_out.push_back(out_normals[i].x);
-			data_out.push_back(out_normals[i].y);
-			data_out.push_back(out_normals[i].z);
+			to_return->data_out.push_back(out_positions[i].x);
+			to_return->data_out.push_back(out_positions[i].y);
+			to_return->data_out.push_back(out_positions[i].z);
+					 
+			to_return->data_out.push_back(out_textures[i].u);
+			to_return->data_out.push_back(out_textures[i].v);
+					 
+			to_return->data_out.push_back(out_normals[i].x);
+			to_return->data_out.push_back(out_normals[i].y);
+			to_return->data_out.push_back(out_normals[i].z);
 		}
 
 	}
 
+	to_return->indicies = to_return->out_indicies.size();
+	to_return->size = to_return->data_out.size() * sizeof(float);
+
+	return to_return;
 }
