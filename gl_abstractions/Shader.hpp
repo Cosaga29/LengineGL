@@ -9,13 +9,6 @@
 #include "../outside/glm/glm.hpp"
 #include "../outside/glm/gtc/type_ptr.hpp"
 
-#ifndef DEFAULT_FRAG_SHADER
-#define DEFAULT_FRAG_SHADER "../shaders/default/default_frag.shader"
-#endif
-
-#ifndef DEFAULT_VERT_SHADER
-#define DEFAULT_VERT_SHADER "../shaders/default/default_vert.shader"
-#endif
 
 class Shader {
 private:
@@ -32,15 +25,15 @@ public:
 
 public:
 	//file to read shader data from
-	Shader(const std::string& frag = DEFAULT_FRAG_SHADER, const std::string& vert = DEFAULT_VERT_SHADER);
+	Shader(const std::string& frag, const std::string& vert);
 	~Shader();
 
 	void Bind() const;
 	void Unbind() const;
 
 	// Set uniforms
-	void SetUniformMat4fv(const std::string& name, glm::mat4& matrix_value);
-	void SetUniform3fv(const std::string& name, glm::vec3& vector_value);
+	void SetUniformMat4fv(const std::string& name, const glm::mat4& matrix_value);
+	void SetUniform3fv(const std::string& name, const glm::vec3& vector_value);
 
 	void SetUniform1i(const std::string& name, int value);
 	void SetUniform1f(const std::string& name, float value);

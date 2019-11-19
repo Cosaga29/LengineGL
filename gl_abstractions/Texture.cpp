@@ -14,7 +14,7 @@ Texture::Texture(const std::string& path)
 	//print out byte data for testing
 	//write a white line at the bottom of the picture to be displayed
 	int pixelWidth = 15;
-	for (int i = 0; i < m_width * sizeof(unsigned int) * pixelWidth; i += 4) {
+	for (unsigned i = 0; i < m_width * sizeof(unsigned int) * pixelWidth; i += 4) {
 		//red channel
 		m_LocalBuffer[i] = 0;
 		//green channel

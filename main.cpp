@@ -2,8 +2,11 @@
 
 #include <chrono>
 
+#include "outside/glm/glm.hpp"
 #include "outside/glm/gtc/matrix_transform.hpp"
 #include "outside/glm/gtc/type_ptr.hpp"
+#include "outside/glm/gtc/quaternion.hpp"
+#include "outside/glm/gtx/quaternion.hpp"
 
 #include "gl_abstractions/VertexArray.hpp"
 #include "gl_abstractions/Shader.hpp"
@@ -59,21 +62,25 @@ int GraphicsApplication::onCreate()
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	scene = new Scene();
+	renderer = new Renderer();
 	
 	//separate loading and adding to a scene
-	scene->AddObject("src/teapot_normals.obj", "teapot", "shaders/frag.shader", "shaders/vert.shader");
-	scene->AddObject("src/bigger.obj", "deer", "shaders/frag.shader", "shaders/vert.shader");
+	scene->LoadObject("src/teapot_normals.obj", "teapot");
+	scene->LoadObject("src/bigger.obj", "deer");
 
 	scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
-	scene->getObjectByName("deer")->transformation.get()->Translation = { 0.0f, -12.0f, 0.0f };
+	scene->getObjectByName("deer")->transformation.get()->translation = { 0.0f, -12.0f, 0.0f };
 	
-	renderer = new Renderer();
+	scene->AddObject("deer");
+	scene->AddObject("teapot");
+
 
 	//set initial light position
 	light_pos = { 0.0f, 0.0f, -2.0f };
+	scene->SetGlobalLightPos(light_pos);
 	//teapot_shader->SetUniform3fv("lightPos", light_pos);
-	scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
-	scene->getObjectByName("deer")->shader->SetUniform3fv("lightPos", light_pos);
+	//scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
+	//scene->getObjectByName("deer")->shader->SetUniform3fv("lightPos", light_pos);
 
 
 	//enable depth buffer
@@ -104,10 +111,15 @@ int GraphicsApplication::onUpdate()
 		processInput(m_window);
 
 
-		//pass light vector to openGL
-		scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
-		scene->getObjectByName("deer")->shader->SetUniform3fv("lightPos", light_pos);
+		//create euler angle for rotation
+		//rotate the deer
+		glm::vec3 rotAxis = scene->getObjectByName("deer")->transformation.get()->rotationAxis;
+		glm::quat myquat = glm::angleAxis(glm::degrees(0.001f), rotAxis);
+		scene->getObjectByName("deer")->transformation.get()->rotationQuat *=  myquat;
 
+
+
+		//pass the scene to the renderer to draw
 		renderer->DrawScene(*scene);
 
 
@@ -167,12 +179,13 @@ void GraphicsApplication::processInput(GLFWwindow* window)
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS)
 	{
-		light_pos.y -= 0.1f;
+		scene->m_light.position.y += 0.1f;
 	}
 	if (glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS)
 	{
-		light_pos.y += 0.1f;
+		scene->m_light.position.y -= 0.1f;
 	}
+
 
 	//calculate the scene->m_camera.look_at_pos vector depending on the pitch and yaw of the mouse
 	scene->m_camera.look_at_pos.x = cos(glm::radians(pitch)) * cos((glm::radians(yaw)));

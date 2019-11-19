@@ -11,14 +11,6 @@
 #include "gl_abstractions/VertexArray.hpp"
 #include "Scene.hpp"
 
-
-
-
-struct DrawContect
-{
-};
-
-
 /*
 Class to handle creation of openGL calls and binds to render data to the screen.
 
@@ -33,14 +25,11 @@ class Renderer
 private:
 
 
-
-
-
 public:
 
 	Renderer();
 	void Draw(const VertexArray& va, unsigned int indicies, const Shader& shader) const;
-	void DrawScene(Scene& scene);
+	void DrawScene(const Scene& scene);
 	void Clear() const;
 
 };

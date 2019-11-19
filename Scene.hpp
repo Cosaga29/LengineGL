@@ -11,11 +11,11 @@
 #include "gl_abstractions/Shader.hpp"
 
 #ifndef DEFAULT_FRAG_SHADER
-#define DEFAULT_FRAG_SHADER "../shaders/default/default_frag.shader"
+#define DEFAULT_FRAG_SHADER "shaders/default/default_frag.shader"
 #endif
 
 #ifndef DEFAULT_VERT_SHADER
-#define DEFAULT_VERT_SHADER "../shaders/default/default_vert.shader"
+#define DEFAULT_VERT_SHADER "shaders/default/default_vert.shader"
 #endif
 
 
@@ -50,10 +50,18 @@ typedef unsigned Shader_ID;
 
 struct Transform
 {
-	glm::vec3 Scale;
-	glm::vec3 RotationAxis;
-	glm::quat Rotation;
-	glm::vec3 Translation;
+	Transform()
+	{
+		scale = { 1.0f, 1.0f, 1.0f };
+		rotationAxis = { 0.0f, 1.0f, 0.0f };
+		rotationQuat = { 1.0f, 0.0f, 0.0f , 0.0f };
+		translation = { 0.0f, 0.0f, 0.0f };
+	}
+
+	glm::vec3 scale;
+	glm::vec3 rotationAxis;
+	glm::quat rotationQuat;
+	glm::vec3 translation;
 };
 
 struct Camera
@@ -100,10 +108,12 @@ Class that contains all the necessary information to render objects to the scree
 
 class Scene
 {
+
 public:
 
 	//Each object has a vao(vbo + ibo), transformation model and a shader to be used
 	std::vector<SceneObject*> objects_to_render;
+	std::vector<SceneObject*> objects_loaded;
 
 	std::unordered_map<std::string, SceneObject*> name_obj_map;
 
@@ -112,9 +122,17 @@ public:
 	DiffuseLight m_light;
 
 	//add an object from a model file, a frag and vert shader, and give it a nickname
-	bool AddObject(const std::string& model_file, const std::string& name, const std::string frag_shader = DEFAULT_FRAG_SHADER, const std::string vert_shader = DEFAULT_VERT_SHADER);
+	bool LoadObject(const std::string& model_file, const std::string& name, const std::string frag_shader = DEFAULT_FRAG_SHADER, const std::string vert_shader = DEFAULT_VERT_SHADER);
+	bool AddObject(const std::string& name);
+	bool RemoveObject(const std::string& name);
+
 	bool AddShader(std::string& frag_shader, std::string& vert_shader);
 	void SetPerspective(float fov = 90.0f, float aspectRatio = 1.333, float fNear = 0.1f, float fFar = 1000.0f);
+	
+	inline bool isLoaded(const std::string& name) { return (name_obj_map.find(name) == name_obj_map.end()) ? 0 : 1; }
+	inline void SetGlobalLightPos(const glm::vec3& light_pos = { 0.0f, 3.0f, 0.0f }) { m_light.position = light_pos; }
+	inline void SetGlobalLightCol(const glm::vec3& light_col = { 1.0f, 1.0f, 1.0f }) { m_light.color = light_col; }
+
 
 	SceneObject* getObjectByName(const std::string& object_name);
 	SceneObject* getObjectById(Object_ID);

@@ -16,7 +16,7 @@ void Renderer::Draw(const VertexArray& va, unsigned int indicies, const Shader& 
 
 
 //render scene
-void Renderer::DrawScene(Scene& scene)
+void Renderer::DrawScene(const Scene& scene)
 {
 
 	//build projection matrix from the scene data
@@ -30,8 +30,9 @@ void Renderer::DrawScene(Scene& scene)
 	);
 
 
+
 	//loop through every object in the scene and draw it occording to its shader
-	for (int i = 0; i < scene.objects_to_render.size(); i++)
+	for (unsigned i = 0; i < scene.objects_to_render.size(); i++)
 	{
 		//upload the projection matrix and the view matrix to the vert shader
 		scene.objects_to_render[i]->shader->SetUniformMat4fv("proj_matrix", proj_matrix);
@@ -39,13 +40,16 @@ void Renderer::DrawScene(Scene& scene)
 
 
 		//build model_matrix
-		glm::mat4 translate_matrix = glm::translate(glm::mat4(1.0f), scene.objects_to_render[i]->transformation.get()->Translation);
-		glm::mat4 scale_matrix = glm::scale(glm::mat4(1.0f), scene.objects_to_render[i]->transformation.get()->Scale);
-		glm::mat4 rotation_matrix = glm::toMat4(glm::quat(scene.objects_to_render[i]->transformation.get()->RotationAxis * scene.objects_to_render[i]->transformation.get()->Rotation));
+		glm::mat4 translate_matrix = glm::translate(glm::mat4(1.0f), scene.objects_to_render[i]->transformation.get()->translation);
+		glm::mat4 scale_matrix = glm::scale(glm::mat4(1.0f), scene.objects_to_render[i]->transformation.get()->scale);
+		glm::mat4 rotation_matrix = glm::toMat4(glm::quat(scene.objects_to_render[i]->transformation.get()->rotationQuat));
 		glm::mat4 model_matrix = translate_matrix * rotation_matrix * scale_matrix;
 
 		//upload the model_matrix
 		scene.objects_to_render[i]->shader->SetUniformMat4fv("model_matrix", model_matrix);
+
+		//set the global light_pos
+		scene.objects_to_render[i]->shader->SetUniform3fv("lightPos", scene.m_light.position);
 
 
 		scene.objects_to_render[i]->vao.get()->Bind();

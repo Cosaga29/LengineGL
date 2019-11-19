@@ -23,14 +23,14 @@ void Shader::Unbind() const
 	GLCall(glUseProgram(0));
 }
 
-void Shader::SetUniformMat4fv(const std::string& name, glm::mat4& matrix_value)
+void Shader::SetUniformMat4fv(const std::string& name, const glm::mat4& matrix_value)
 {
 	this->Bind();
 	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix_value)));
 	this->Unbind();
 }
 
-void Shader::SetUniform3fv(const std::string& name, glm::vec3& vector_value)
+void Shader::SetUniform3fv(const std::string& name, const glm::vec3& vector_value)
 {
 	this->Bind();
 	GLCall(glUniform3fv(GetUniformLocation(name), 1, glm::value_ptr(vector_value)));
