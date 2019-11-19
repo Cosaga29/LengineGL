@@ -110,12 +110,10 @@ int GraphicsApplication::onUpdate()
 		//handle user input and mouse pitch yaw
 		processInput(m_window);
 
-
 		//create euler angle for rotation
 		//rotate the deer
 		scene->getObjectByName("deer")->transformation.get()->RotateX(0.015 * frame_time);
 		scene->getObjectByName("deer")->transformation.get()->RotateY(0.015 * frame_time);
-
 
 		//pass the scene to the renderer to draw
 		renderer->DrawScene(*scene);
