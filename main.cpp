@@ -60,16 +60,20 @@ int GraphicsApplication::onCreate()
 
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-
 	scene = new Scene();
 	scene->AddObject("src/teapot_normals.obj", "teapot", "shaders/frag.shader", "shaders/vert.shader");
-	//scene->AddObject("src/bigger.obj", "teapot", "shaders/frag.shader", "shaders/vert.shader");
+	scene->AddObject("src/bigger.obj", "deer", "shaders/frag.shader", "shaders/vert.shader");
+
+	scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
+	scene->getObjectByName("deer")->transformation.get()->Translation = { 0.0f, -12.0f, 0.0f };
+	
 	renderer = new Renderer();
 
 	//set initial light position
 	light_pos = { 0.0f, 0.0f, -2.0f };
 	//teapot_shader->SetUniform3fv("lightPos", light_pos);
 	scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
+	scene->getObjectByName("deer")->shader->SetUniform3fv("lightPos", light_pos);
 
 
 	//enable depth buffer
@@ -99,17 +103,10 @@ int GraphicsApplication::onUpdate()
 		//handle user input and mouse pitch yaw
 		processInput(m_window);
 
-		//TODO: MAKE QUAT ROTATIONS WORK
-		//glm::mat4 rotateZ = glm::mat4(1.0f);
-		//glm::mat4 rotateX = glm::mat4(1.0f);
-		//auto now = std::chrono::high_resolution_clock::now();
-		//float time = std::chrono::duration_cast<std::chrono::duration<float>>(now - app_start).count();
-		//rotateZ = glm::rotate(rotateZ, speed * (0.5f) * time * glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		//rotateX = glm::rotate(rotateX, speed * time * glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
 
 		//pass light vector to openGL
 		scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
+		scene->getObjectByName("deer")->shader->SetUniform3fv("lightPos", light_pos);
 
 		renderer->DrawScene(*scene);
 

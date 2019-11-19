@@ -25,16 +25,16 @@ void Shader::Unbind() const
 
 void Shader::SetUniformMat4fv(const std::string& name, glm::mat4& matrix_value)
 {
-
+	this->Bind();
 	GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix_value)));
-
+	this->Unbind();
 }
 
 void Shader::SetUniform3fv(const std::string& name, glm::vec3& vector_value)
 {
-
+	this->Bind();
 	GLCall(glUniform3fv(GetUniformLocation(name), 1, glm::value_ptr(vector_value)));
-
+	this->Unbind();
 }
 
 void Shader::SetUniform1i(const std::string& name, int value)

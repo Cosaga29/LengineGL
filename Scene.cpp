@@ -38,12 +38,14 @@ bool Scene::AddObject(const std::string& model_file, const std::string& name, co
 		});
 
 	Shader* model_shader = new Shader(frag_shader, vert_shader);
-	model_shader->Bind();
-	objects_to_render.push_back(SceneObject(model_vao, transformation, model_shader));
+	objects_to_render.push_back(new SceneObject(model_vao, transformation, model_shader));
+	model_shader->Unbind();
 
 	//now that scene object has been added, make references to it by name
-	name_obj_map[name] = &(objects_to_render.back());
+	name_obj_map[name] = objects_to_render.back();
 
+	model_vao->Unbind();
+	
 
 	return true;
 }

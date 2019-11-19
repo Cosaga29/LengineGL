@@ -50,23 +50,25 @@ void Renderer::DrawScene(Scene& scene)
 	for (int i = 0; i < scene.objects_to_render.size(); i++)
 	{
 		//upload the projection matrix and the view matrix to the vert shader
-		scene.objects_to_render[i].shader->SetUniformMat4fv("proj_matrix", proj_matrix);
-		scene.objects_to_render[i].shader->SetUniformMat4fv("view_matrix", view_matrix);
+		scene.objects_to_render[i]->shader->SetUniformMat4fv("proj_matrix", proj_matrix);
+		scene.objects_to_render[i]->shader->SetUniformMat4fv("view_matrix", view_matrix);
 
 
 		//build model_matrix
-		glm::mat4 translate_matrix = glm::translate(glm::mat4(1.0f), scene.objects_to_render[i].transformation.get()->Translation);
-		glm::mat4 scale_matrix = glm::scale(glm::mat4(1.0f), scene.objects_to_render[i].transformation.get()->Scale);
-		glm::mat4 rotation_matrix = glm::toMat4(glm::quat(scene.objects_to_render[i].transformation.get()->RotationAxis * scene.objects_to_render[i].transformation.get()->Rotation));
+		glm::mat4 translate_matrix = glm::translate(glm::mat4(1.0f), scene.objects_to_render[i]->transformation.get()->Translation);
+		glm::mat4 scale_matrix = glm::scale(glm::mat4(1.0f), scene.objects_to_render[i]->transformation.get()->Scale);
+		glm::mat4 rotation_matrix = glm::toMat4(glm::quat(scene.objects_to_render[i]->transformation.get()->RotationAxis * scene.objects_to_render[i]->transformation.get()->Rotation));
 		glm::mat4 model_matrix = translate_matrix * rotation_matrix * scale_matrix;
 
 		//upload the model_matrix
-		scene.objects_to_render[i].shader->SetUniformMat4fv("model_matrix", model_matrix);
+		scene.objects_to_render[i]->shader->SetUniformMat4fv("model_matrix", model_matrix);
 
 
-		scene.objects_to_render[i].vao.get()->Bind();
-		GLCall(glDrawElements(GL_TRIANGLES, scene.objects_to_render[i].vao.get()->indicies, GL_UNSIGNED_INT, nullptr));
-		scene.objects_to_render[i].vao.get()->Unbind();
+		scene.objects_to_render[i]->vao.get()->Bind();
+		scene.objects_to_render[i]->shader.get()->Bind();
+		GLCall(glDrawElements(GL_TRIANGLES, scene.objects_to_render[i]->vao.get()->indicies, GL_UNSIGNED_INT, nullptr));
+		scene.objects_to_render[i]->vao.get()->Unbind();
+		scene.objects_to_render[i]->shader.get()->Unbind();
 	}
 
 }

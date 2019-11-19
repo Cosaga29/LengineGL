@@ -105,7 +105,7 @@ class Scene
 public:
 
 	//Each object has a vao(vbo + ibo), transformation model and a shader to be used
-	std::vector<SceneObject> objects_to_render;
+	std::vector<SceneObject*> objects_to_render;
 
 	std::unordered_map<std::string, SceneObject*> name_obj_map;
 
