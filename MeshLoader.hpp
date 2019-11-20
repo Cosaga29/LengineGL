@@ -58,9 +58,10 @@ struct gl_data
 
 
 
-class Mesh
+class MeshLoader
 {
 public:
+
 	std::vector<vec3> unique_position_data;	//v
 	std::vector<vec3> unique_normal_data;	//vn
 	std::vector<vec2> unique_texture_data;	//vt
@@ -69,12 +70,9 @@ public:
 	std::vector<unsigned int> texture_index;	//second f component x/1/y x/2/y x/3/y
 	std::vector<unsigned int> normal_index;		//third f component x/y/1 x/y/2 x/y/3
 
-	std::vector<unsigned int> out_indicies;		//single indexed collection refering to packed verticies in map
 	std::vector<vec3> out_positions;
 	std::vector<vec2> out_textures;
 	std::vector<vec3> out_normals;
-
-	std::vector<float> data_out;
 
 	bool hasTexture = 1;
 	bool hasNormal = 1;
@@ -82,7 +80,7 @@ public:
 	std::map<packedVertex, unsigned int> vert_map;	//one index'ed map of vertecies
 
 
-	Mesh();
+	MeshLoader();
 
 	gl_data* loadFromObj(const char* filepath);
 	

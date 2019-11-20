@@ -4,28 +4,11 @@
 
 #include "Renderer.hpp"
 #include "Application.hpp"
-#include "Model.hpp"
 #include "Scene.hpp"
 
 
 
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	if (key != GLFW_KEY_LEFT_ALT || action == GLFW_RELEASE) { return; }
-	Application* this_app = (Application*)glfwGetWindowUserPointer(window);
-	if (this_app->cursor_disabled)
-	{
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	}
-	else
-	{
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	}
-	this_app->cursor_disabled = !this_app->cursor_disabled;
-}
-
-
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 
 
@@ -78,23 +61,16 @@ int GraphicsApplication::onCreate()
 	renderer = new Renderer();
 	
 	//separate loading and adding to a scene
-	//scene->LoadObject("src/teapot_normals.obj", "teapot");
-	scene->LoadObject("src/testteapot.obj", "deer");
+	scene->LoadObject("src/teapot_normals.obj", "teapot");
 
-	//scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
-	scene->getObjectByName("deer")->transformation.get()->translation = { 0.0f, 0.0f, 2.0f };
+	scene->getObjectByName("teapot")->transformation.get()->translation = { 0.0f, 0.0f, 2.0f };
 	
-	scene->AddObject("deer");
 	scene->AddObject("teapot");
 
 
 	//set initial light position
 	light_pos = { 0.0f, 0.0f, -2.0f };
 	scene->SetGlobalLightPos(light_pos);
-	//teapot_shader->SetUniform3fv("lightPos", light_pos);
-	//scene->getObjectByName("teapot")->shader->SetUniform3fv("lightPos", light_pos);
-	//scene->getObjectByName("deer")->shader->SetUniform3fv("lightPos", light_pos);
-
 
 	//enable depth buffer
 	glEnable(GL_DEPTH_TEST);
@@ -123,10 +99,10 @@ int GraphicsApplication::onUpdate()
 		//handle user input and mouse pitch yaw
 		processInput(m_window);
 
-		//rotate the deer
-		scene->getObjectByName("deer")->transformation.get()->RotateX(0.015f * frame_time);
-		scene->getObjectByName("deer")->transformation.get()->RotateY(0.015f * frame_time);
-		scene->getObjectByName("deer")->transformation.get()->RotateZ(0.015f * frame_time);
+		//rotate the teapot
+		scene->getObjectByName("teapot")->transformation->RotateX(0.015f * frame_time);
+		scene->getObjectByName("teapot")->transformation->RotateY(0.015f * frame_time);
+		scene->getObjectByName("teapot")->transformation->RotateZ(0.015f * frame_time);
 
 		//pass the scene to the renderer to draw
 		renderer->DrawScene(*scene);
@@ -209,6 +185,24 @@ void GraphicsApplication::processInput(GLFWwindow* window)
 
 
 }
+
+
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key != GLFW_KEY_LEFT_ALT || action == GLFW_RELEASE) { return; }
+	Application* this_app = (Application*)glfwGetWindowUserPointer(window);
+	if (this_app->cursor_disabled)
+	{
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+	else
+	{
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+	this_app->cursor_disabled = !this_app->cursor_disabled;
+}
+
 
 
 

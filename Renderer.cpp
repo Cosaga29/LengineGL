@@ -52,11 +52,11 @@ void Renderer::DrawScene(const Scene& scene)
 		scene.objects_to_render[i]->shader->SetUniform3fv("lightPos", scene.m_light.position);
 
 
-		scene.objects_to_render[i]->vao.get()->Bind();
-		scene.objects_to_render[i]->shader.get()->Bind();
-		GLCall(glDrawElements(GL_TRIANGLES, scene.objects_to_render[i]->vao.get()->indicies, GL_UNSIGNED_INT, nullptr));
-		scene.objects_to_render[i]->vao.get()->Unbind();
-		scene.objects_to_render[i]->shader.get()->Unbind();
+		scene.objects_to_render[i]->vao->Bind();
+		scene.objects_to_render[i]->shader->Bind();
+		GLCall(glDrawElements(GL_TRIANGLES, scene.objects_to_render[i]->vao->indicies, GL_UNSIGNED_INT, nullptr));
+		scene.objects_to_render[i]->vao->Unbind();
+		scene.objects_to_render[i]->shader->Unbind();
 	}
 
 }

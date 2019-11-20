@@ -1,4 +1,4 @@
-#include "Mesh.hpp"
+#include "MeshLoader.hpp"
 
 
 /*
@@ -22,12 +22,11 @@ inline bool contains(std::map<packedVertex, unsigned int>& m, struct packedVerte
 
 
 
-Mesh::Mesh()
-{
-}
+MeshLoader::MeshLoader()
+{}
 
 
-gl_data* Mesh::loadFromObj(const char* filename)
+gl_data* MeshLoader::loadFromObj(const char* filename)
 {
 	gl_data* to_return = new gl_data();
 

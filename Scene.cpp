@@ -25,11 +25,11 @@ bool Scene::LoadObject(const std::string& model_file, const std::string& name, c
 
 
 	//create vao from the model_file given
-	VertexArray* model_vao = new VertexArray();
-	model_vao->Bind();
+	VertexArray* model_vao = new VertexArray(model_file.c_str());
+	model_vao->initLayout();
 
 	//create model and bind it to VAO
-	model_vao->SetModel(new Model(model_file.c_str()));
+	//model_vao->SetModel(new Model(model_file.c_str()));
 
 	//default transformation
 	Transform* transformation = new Transform();
@@ -41,8 +41,6 @@ bool Scene::LoadObject(const std::string& model_file, const std::string& name, c
 
 	//now that scene object has been added, make references to it by name
 	name_obj_map[name] = objects_loaded.back();
-
-	model_vao->Unbind();
 
 
 	return true;
@@ -90,6 +88,7 @@ SceneObject* Scene::getObjectByName(const std::string& object_name)
 {
 	// TODO: insert return statement here
 	return name_obj_map[object_name];
+
 }
 
 SceneObject* Scene::getObjectById(Object_ID)
