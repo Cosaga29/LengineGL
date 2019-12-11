@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <map>
 #include <memory>
 #include <glew.h>
 #include "outside/glm/glm.hpp"
@@ -77,11 +78,12 @@ Each object passed to the renderer will have a
 struct SceneObject
 {
 	SceneObject(VertexArray* vao, Transform* transform, Shader* shader) :
-		vao(vao), transformation(transform), shader(shader)
+		vao(vao), transformation(transform), shader(shader), isVisible(1)
 	{}
 	std::unique_ptr<VertexArray> vao;
 	std::unique_ptr<Transform> transformation;
 	std::unique_ptr<Shader> shader;
+	bool isVisible;
 };
 
 
@@ -121,10 +123,18 @@ class Scene
 public:
 
 	//Each object has a vao(vbo + ibo), transformation model and a shader to be used
-	std::vector<SceneObject*> objects_to_render;
+	//std::map<std::string, SceneObject*> objects_to_render;
+
+	//TODO: Sort contained by z-value to improve rendering
+	std::vector<SceneObject*> visible_objects;
 	std::vector<SceneObject*> objects_loaded;
 
+	//hashmap that stores name reference to the scene object
 	std::unordered_map<std::string, SceneObject*> name_obj_map;
+
+	//hashmap that stores name reference to index into objects_loaded vector for O(1) fast removal
+	std::unordered_map<std::string, int> name_index_map;
+
 
 	Scene();
 	Camera m_camera;
