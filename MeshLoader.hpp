@@ -7,6 +7,7 @@
 #include <iostream>
 #include <map>
 #include "outside/glm/glm.hpp"
+#include "gl_abstractions/GLData.hpp"
 
 /*
 Eventually this class will be referred to as the "model loader" as the Model class encapsulates the 
@@ -42,20 +43,6 @@ struct packedVertex
 };
 
 
-struct gl_data
-{
-	gl_data() { size = 0; stride = 0; attributes = 0; indicies = 0; hasTexture = 0; hasNormal = 0; }
-
-	unsigned int size;	//size in bytes
-	unsigned int stride;	//stride of the data
-	unsigned int attributes;	//how many different attributes were read
-	unsigned int indicies;		//number of indicies reawd
-	bool hasTexture;
-	bool hasNormal;
-	std::vector<float> data_out;	//raw data ready for VBO
-	std::vector<unsigned int> out_indicies;	//raw index data for IBO
-};
-
 
 
 class MeshLoader
@@ -82,6 +69,6 @@ public:
 
 	MeshLoader();
 
-	gl_data* loadFromObj(const char* filepath);
+	GLData* loadFromObj(const char* filepath);
 	
 };

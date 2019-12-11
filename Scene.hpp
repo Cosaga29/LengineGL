@@ -11,6 +11,8 @@
 #include "outside/glm/gtx/quaternion.hpp"
 #include "gl_abstractions/Shader.hpp"
 #include "gl_abstractions/VertexArray.hpp"
+#include "gl_abstractions/GLData.hpp"
+#include "gl_abstractions/GLLine.hpp"
 
 #ifndef DEFAULT_FRAG_SHADER
 #define DEFAULT_FRAG_SHADER "shaders/default/default_frag.shader"
@@ -20,8 +22,10 @@
 #define DEFAULT_VERT_SHADER "shaders/default/default_vert.shader"
 #endif
 
-
-
+enum DRAW_MODE
+{
+	TRIANGLES = 0, LINES = 1
+};
 
 //this is the VertexArray's m_rendererID
 typedef unsigned Object_ID;
@@ -78,12 +82,13 @@ Each object passed to the renderer will have a
 struct SceneObject
 {
 	SceneObject(VertexArray* vao, Transform* transform, Shader* shader) :
-		vao(vao), transformation(transform), shader(shader), isVisible(1)
+		vao(vao), transformation(transform), shader(shader), isVisible(1), mode(TRIANGLES)
 	{}
 	std::unique_ptr<VertexArray> vao;
 	std::unique_ptr<Transform> transformation;
 	std::unique_ptr<Shader> shader;
 	bool isVisible;
+	DRAW_MODE mode;
 };
 
 
@@ -142,6 +147,7 @@ public:
 
 	//add an object from a model file, a frag and vert shader, and give it a nickname
 	bool LoadObject(const std::string& model_file, const std::string& name, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
+	bool LoadObject(GLData* raw_obj, const std::string& name, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
 	bool AddObject(const std::string& name);
 	bool RemoveObject(const std::string& name);
 

@@ -16,7 +16,8 @@ Scene::Scene()
 }
 
 /*
-Add an object to the scene to be rendered. fragshader and vert shader are optional
+Add an object to the loaded objects containers. fragshader and vert shader are optional
+The object must be made visible and added to the visible objects container
 */
 bool Scene::LoadObject(const std::string& model_file, const std::string& name, const std::string& frag_shader, const std::string& vert_shader)
 {
@@ -42,6 +43,38 @@ bool Scene::LoadObject(const std::string& model_file, const std::string& name, c
 
 	return true;
 }
+
+
+/*
+Add an object to the loaded objects containers. fragshader and vert shader are optional
+The object must be made visible and added to the visible objects container
+*/
+bool Scene::LoadObject(GLData* raw_obj, const std::string& name, const std::string& frag_shader, const std::string& vert_shader)
+{
+
+	//printf("Scene:\nLoading Object [%i]:\t%s\n%s\tFragment Shader: %s\n\tVertex Shader: %s\n\n\n", objects_loaded.size(), name.c_str(), model_file.c_str(), frag_shader.c_str(), vert_shader.c_str());
+
+	//create vao from the model_file given
+	VertexArray* model_vao = new VertexArray(raw_obj);
+	model_vao->initLayout();
+
+	//default transformation
+	Transform* transformation = new Transform();
+
+	//shader specified
+	Shader* model_shader = new Shader(frag_shader, vert_shader);
+
+	//add the objects loaded
+	objects_loaded.push_back(new SceneObject(model_vao, transformation, model_shader));
+	model_shader->Unbind();
+
+	//now that scene object has been added, make references to it by name
+	name_obj_map[name] = objects_loaded.back();
+
+	return true;
+}
+
+
 
 
 /*

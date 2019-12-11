@@ -107,6 +107,12 @@
     <ClInclude Include="MeshLoader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gl_abstractions\GLData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl_abstractions\GLLine.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="gl_abstractions\PixelBuffer.txt" />

@@ -26,9 +26,9 @@ MeshLoader::MeshLoader()
 {}
 
 
-gl_data* MeshLoader::loadFromObj(const char* filename)
+GLData* MeshLoader::loadFromObj(const char* filename)
 {
-	gl_data* to_return = new gl_data();
+	GLData* to_return = new GLData();
 
 
 

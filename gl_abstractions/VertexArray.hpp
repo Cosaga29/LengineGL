@@ -6,6 +6,7 @@
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
 #include "../MeshLoader.hpp"
+#include "GLData.hpp"
 
 /*
 Condensed old "Model" class into this VAO class. 
@@ -13,8 +14,6 @@ The VAO is the closest thing OpenGl has to representing a model. This class cont
 of the information needed for basic rendering (pos, normal, texture)
 
 Need to test with textures still.
-
-
 
 */
 
@@ -32,11 +31,11 @@ public:
 	unsigned int indicies;
 	unsigned int attributes;
 	bool hasLayout;
-	std::unique_ptr<gl_data> model_data;
+	std::unique_ptr<GLData> model_data;
 
 	//TODO: set multithread to load this file in background
-	VertexArray(const std::string& filename);
-	VertexArray(struct gl_data*);
+	VertexArray(const std::string& filename); //create vertex array based on a model file
+	VertexArray(struct GLData* data); //create vertex array from simple gl data
 
 	void Bind();
 	void Unbind();

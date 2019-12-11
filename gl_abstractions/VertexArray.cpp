@@ -23,9 +23,9 @@ VertexArray::VertexArray(const std::string& filename) :
 }
 
 /*
-Constructor to call when loading a model from memory (pre-defined gl_data struct)
+Constructor to call when loading a model from memory (pre-defined GLData struct)
 */
-VertexArray::VertexArray(struct gl_data* data) :
+VertexArray::VertexArray(struct GLData* data) :
 	m_rendererID(0), indicies(0), attributes(0), hasLayout(0)
 {
 	glGenVertexArrays(1, &m_rendererID);
@@ -33,7 +33,10 @@ VertexArray::VertexArray(struct gl_data* data) :
 	indicies = model_data->indicies;
 }
 
-
+/*
+Function that creates vertex buffer and index buffer used in the VAO.
+Automatically sets the attribptr for the VAO depending on the number of attributes
+*/
 int VertexArray::initLayout()
 {
 	glBindVertexArray(m_rendererID);
@@ -45,7 +48,7 @@ int VertexArray::initLayout()
 	//vao, vbo and ibo are bound at this point: set attributes
 
 	//set attrib pointer for position data in vbo
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, model_data->stride * sizeof(float), 0);
+	glVertexAttribPointer(attributes, 3, GL_FLOAT, GL_FALSE, model_data->stride * sizeof(float), 0);
 	glEnableVertexAttribArray(0);
 	attributes++;
 

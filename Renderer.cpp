@@ -48,7 +48,19 @@ void Renderer::DrawScene(const Scene& scene)
 		//bind VAO for the object
 		obj->vao->Bind();
 		obj->shader->Bind();
-		GLCall(glDrawElements(GL_TRIANGLES, obj->vao->indicies, GL_UNSIGNED_INT, nullptr));
+
+		//determine draw mode based on object's mode
+		switch (obj->mode)
+		{
+		case TRIANGLES:
+			GLCall(glDrawElements(GL_TRIANGLES, obj->vao->indicies, GL_UNSIGNED_INT, nullptr));
+			break;
+
+		case LINES:
+			GLCall(glDrawElements(GL_LINES, obj->vao->indicies, GL_UNSIGNED_INT, nullptr));
+			break;
+		}
+
 		obj->vao->Unbind();
 		obj->shader->Unbind();
 	}
