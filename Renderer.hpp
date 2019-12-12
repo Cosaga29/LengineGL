@@ -1,8 +1,10 @@
 #pragma once
 #include <glew.h>
 #include <string>
-
+#include <queue>
 #include "Scene.hpp"
+#include <functional>
+
 
 /*
 Class to handle creation of openGL calls and binds to render data to the screen.
@@ -20,7 +22,7 @@ private:
 public:
 
 	Renderer();
-	void Draw(const VertexArray& va, unsigned int indicies, const Shader& shader) const;
+	void DrawObj(const Scene& scene, const SceneObject& obj) const;
 	void DrawScene(const Scene& scene);
 	void Clear() const;
 

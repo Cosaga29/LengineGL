@@ -52,10 +52,7 @@ struct GLLine : public GLData
 		hasTexture = false;
 		hasNormal = false;
 
-
 	}
-
-
 
 
 };

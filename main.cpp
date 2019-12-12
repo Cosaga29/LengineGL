@@ -61,35 +61,13 @@ int GraphicsApplication::onCreate()
 	scene = new Scene();
 	renderer = new Renderer();
 
-	
-	
+
+
 	//separate loading and adding to a scene
 	scene->LoadObject("src/teapot_normals.obj", "teapot");
-	scene->LoadObject(new GLLine(X), "testlineX");
-	scene->LoadObject(new GLLine(Y), "testlineY");
-	scene->LoadObject(new GLLine(Z), "testlineZ");
-	
 
 	scene->getObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, 2.0f };
 	scene->AddObject("teapot");
-
-
-	scene->getObjectByName("testlineX")->transformation->scale = { 5.0, 5.0, 5.0 };
-	scene->getObjectByName("testlineY")->transformation->scale = { 5.0, 5.0, 5.0 };
-	scene->getObjectByName("testlineZ")->transformation->scale = { 5.0, 5.0, 5.0 };
-
-	scene->getObjectByName("testlineX")->mode = LINES;
-	scene->getObjectByName("testlineY")->mode = LINES;
-	scene->getObjectByName("testlineZ")->mode = LINES;
-
-	scene->getObjectByName("testlineX")->mode = LINES;
-	scene->getObjectByName("testlineY")->mode = LINES;
-	scene->getObjectByName("testlineZ")->mode = LINES;
-
-	scene->AddObject("testlineX");
-	scene->AddObject("testlineY");
-	scene->AddObject("testlineZ");
-
 
 	//set initial light position
 	light_pos = { 0.0f, 0.0f, -2.0f };
