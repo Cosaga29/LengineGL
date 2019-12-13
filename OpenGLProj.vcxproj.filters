@@ -33,12 +33,6 @@
     <ClCompile Include="gl_abstractions\IndexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gl_abstractions\PixelBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gl_abstractions\PixelDrawer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gl_abstractions\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -83,12 +77,6 @@
     <ClInclude Include="gl_abstractions\IndexBuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gl_abstractions\PixelBuffer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gl_abstractions\PixelDrawer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gl_abstractions\Shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -111,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gl_abstractions\GLLine.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl_abstractions\GLQuad.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

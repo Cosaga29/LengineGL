@@ -6,6 +6,7 @@
 #include "Application.hpp"
 #include "Scene.hpp"
 #include "gl_abstractions/GLLine.hpp"
+#include "gl_abstractions/GLQuad.hpp"
 
 
 
@@ -64,10 +65,13 @@ int GraphicsApplication::onCreate()
 
 
 	//separate loading and adding to a scene
-	scene->LoadObject("src/teapot_normals.obj", "teapot");
+	//scene->LoadObject("src/teapot_normals.obj", "teapot");
 
-	scene->getObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, 2.0f };
-	scene->AddObject("teapot");
+	//scene->getObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, 2.0f };
+	//scene->AddObject("teapot");
+
+	scene->LoadObject(new GLQuad, "surface");
+	scene->AddObject("surface");
 
 	//set initial light position
 	light_pos = { 0.0f, 0.0f, -2.0f };
@@ -101,9 +105,11 @@ int GraphicsApplication::onUpdate()
 		processInput(m_window);
 
 		//rotate the teapot
-		scene->getObjectByName("teapot")->transformation->RotateX(0.015f * frame_time);
-		scene->getObjectByName("teapot")->transformation->RotateY(0.015f * frame_time);
-		scene->getObjectByName("teapot")->transformation->RotateZ(0.015f * frame_time);
+		//scene->getObjectByName("teapot")->transformation->RotateX(0.015f * frame_time);
+		//scene->getObjectByName("teapot")->transformation->RotateY(0.015f * frame_time);
+		//scene->getObjectByName("teapot")->transformation->RotateZ(0.015f * frame_time);
+
+		//scene->getObjectByName("surface")->transformation->RotateX(0.015f * frame_time);
 
 		//pass the scene to the renderer to draw
 		renderer->DrawScene(*scene);
