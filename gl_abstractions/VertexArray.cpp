@@ -23,9 +23,9 @@ VertexArray::VertexArray(const std::string& filename) :
 }
 
 /*
-Constructor to call when loading a model from memory (pre-defined GLData struct)
+Constructor to call when loading a model from memory (pre-defined Mesh struct)
 */
-VertexArray::VertexArray(struct GLData* data) :
+VertexArray::VertexArray(struct Mesh* data) :
 	m_rendererID(0), indicies(0), attributes(0), hasLayout(0)
 {
 	glGenVertexArrays(1, &m_rendererID);

@@ -1,5 +1,5 @@
 #pragma once
-#include "GLData.hpp"
+#include "Mesh.h"
 #include "../outside/glm/glm.hpp"
 
 enum LINE_DIRECTION
@@ -22,10 +22,10 @@ bool hasNormal;
 std::vector<float> data_out;	//raw data ready for VBO
 std::vector<unsigned int> out_indicies;	//raw index data for IBO
 */
-struct GLLine : public GLData
+struct GLLine : public Mesh
 {
 	GLLine(LINE_DIRECTION dir) :
-		GLData() 
+		Mesh() 
 	{
 		data_out.push_back(0.0f); data_out.push_back(0.0f); data_out.push_back(0.0f); //p1
 		switch (dir)

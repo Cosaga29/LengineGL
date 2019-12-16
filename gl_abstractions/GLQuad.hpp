@@ -1,5 +1,5 @@
 #pragma once
-#include "GLData.hpp"
+#include "Mesh.h"
 
 
 /*
@@ -17,10 +17,10 @@ bool hasNormal;
 std::vector<float> data_out;	//raw data ready for VBO
 std::vector<unsigned int> out_indicies;	//raw index data for IBO
 */
-struct GLQuad : public GLData
+struct GLQuad : public Mesh
 {
 	GLQuad() :
-		GLData()
+		Mesh()
 	{
 		data_out =
 		{

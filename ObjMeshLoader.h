@@ -7,7 +7,7 @@
 #include <iostream>
 #include <map>
 #include "outside/glm/glm.hpp"
-#include "gl_abstractions/GLData.hpp"
+#include "gl_abstractions/Mesh.h"
 
 /*
 Eventually this class will be referred to as the "model loader" as the Model class encapsulates the 
@@ -69,6 +69,6 @@ public:
 
 	MeshLoader();
 
-	GLData* loadFromObj(const char* filepath);
+	Mesh* loadFromObj(const char* filepath);
 	
 };

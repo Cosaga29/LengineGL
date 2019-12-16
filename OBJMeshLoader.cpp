@@ -26,9 +26,9 @@ MeshLoader::MeshLoader()
 {}
 
 
-GLData* MeshLoader::loadFromObj(const char* filename)
+Mesh* MeshLoader::loadFromObj(const char* filename)
 {
-	GLData* to_return = new GLData();
+	Mesh* to_return = new Mesh();
 
 	std::string buffer;
 	std::ifstream inputFile(filename);

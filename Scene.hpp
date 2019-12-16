@@ -11,8 +11,11 @@
 #include "outside/glm/gtx/quaternion.hpp"
 #include "gl_abstractions/Shader.hpp"
 #include "gl_abstractions/VertexArray.hpp"
-#include "gl_abstractions/GLData.hpp"
+#include "gl_abstractions/Mesh.h"
 #include "gl_abstractions/GLLine.hpp"
+#include "Camera.h"
+#include "Transform.h"
+#include "SceneObject.h"
 
 #ifndef DEFAULT_FRAG_SHADER
 #define DEFAULT_FRAG_SHADER "shaders/default/default_frag.shader"
@@ -22,49 +25,11 @@
 #define DEFAULT_VERT_SHADER "shaders/default/default_vert.shader"
 #endif
 
-enum DRAW_MODE
-{
-	TRIANGLES = 0, LINES = 1
-};
 
 //this is the VertexArray's m_rendererID
 typedef unsigned Object_ID;
 typedef unsigned Shader_ID;
 
-struct Transform
-{
-	Transform()
-	{
-		scale = { 1.0f, 1.0f, 1.0f };
-		rotationAxis = { 0.0f, 1.0f, 0.0f };
-		rotationQuat = { 1.0f, 0.0f, 0.0f , 0.0f };
-		translation = { 0.0f, 0.0f, 0.0f };
-	}
-
-	//quaternion math: http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-17-quaternions/
-	inline void RotateX(const float& degrees) { this->rotationAxis = { 1.0f, 0.0f, 0.0f }; this->rotationQuat *= glm::angleAxis(glm::degrees(degrees), this->rotationAxis); }
-	inline void RotateY(const float& degrees) { this->rotationAxis = { 0.0f, 1.0f, 0.0f }; this->rotationQuat *= glm::angleAxis(glm::degrees(degrees), this->rotationAxis); }
-	inline void RotateZ(const float& degrees) { this->rotationAxis = { 0.0f, 0.0f, 1.0f }; this->rotationQuat *= glm::angleAxis(glm::degrees(degrees), this->rotationAxis); }
-
-	glm::vec3 scale;
-	glm::vec3 rotationAxis;
-	glm::quat rotationQuat;
-	glm::vec3 translation;
-};
-
-struct Camera
-{
-	// View
-	glm::vec3 eye_pos;
-	glm::vec3 look_at_pos;
-	glm::vec3 up_axis;
-
-	// Projection matrix (perspective)
-	float fov;
-	float aspect_ratio;
-	float zNear;
-	float zFar;
-};
 
 struct DiffuseLight
 {
@@ -72,24 +37,6 @@ struct DiffuseLight
 	glm::vec3 position;
 };
 
-
-/*
-Each object passed to the renderer will have a
-	vao for vbo/ibo information
-	transformation matrix (model matrix)
-	Shader to be used
-*/
-struct SceneObject
-{
-	SceneObject(VertexArray* vao, Transform* transform, Shader* shader) :
-		vao(vao), transformation(transform), shader(shader), isVisible(1), mode(TRIANGLES)
-	{}
-	std::unique_ptr<VertexArray> vao;
-	std::unique_ptr<Transform> transformation;
-	std::unique_ptr<Shader> shader;
-	bool isVisible;
-	DRAW_MODE mode;
-};
 
 
 /*
@@ -124,6 +71,12 @@ Class that contains all the necessary information to render objects to the scree
 
 class Scene
 {
+private:
+
+	//hashmap that stores name reference to the scene object
+	std::unordered_map<std::string, SceneObject*> name_obj_map;
+	//hashmap that stores name reference to index into objects_loaded vector for O(1) fast removal
+	std::unordered_map<std::string, int> name_index_map;
 
 public:
 
@@ -131,34 +84,29 @@ public:
 	std::vector<SceneObject*> visible_objects;
 	std::vector<SceneObject*> objects_loaded;
 
-	//hashmap that stores name reference to the scene object
-	std::unordered_map<std::string, SceneObject*> name_obj_map;
-
-	//hashmap that stores name reference to index into objects_loaded vector for O(1) fast removal
-	std::unordered_map<std::string, int> name_index_map;
-
-
 	Scene();
+	~Scene();
+
 	Camera m_camera;
 	DiffuseLight m_light;
 
 	//add an object from a model file, a frag and vert shader, and give it a nickname
 	bool LoadObject(const std::string& model_file, const std::string& name, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
-	bool LoadObject(GLData* raw_obj, const std::string& name, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
+	bool LoadObject(Mesh* raw_obj, const std::string& name, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
 	
 	bool AddObject(const std::string& name);
 	bool RemoveObject(const std::string& name);
+	void ClearScene();
 
 	bool AddShader(std::string& frag_shader, std::string& vert_shader);
 	void SetPerspective(float fov = 90.0f, float aspectRatio = 1.333, float fNear = 0.1f, float fFar = 1000.0f);
-	inline bool isLoaded(const std::string& name) { return (name_obj_map.find(name) == name_obj_map.end()) ? 0 : 1; }
 	
+	inline bool isLoaded(const std::string& name) { return (name_obj_map.find(name) == name_obj_map.end()) ? 0 : 1; }
 	inline void SetGlobalLightPos(const glm::vec3& light_pos = { 0.0f, 3.0f, 0.0f }) { m_light.position = light_pos; }
 	inline void SetGlobalLightCol(const glm::vec3& light_col = { 1.0f, 1.0f, 1.0f }) { m_light.color = light_col; }
 
-
-	SceneObject* getObjectByName(const std::string& object_name);
-	SceneObject* getObjectById(Object_ID);
+	SceneObject* GetObjectByName(const std::string& object_name);
+	SceneObject* GetObjectById(Object_ID);
 
 	Shader* getShaderById(Shader_ID);
 	Shader* getShaderByName(std::string name);

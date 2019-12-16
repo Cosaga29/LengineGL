@@ -65,13 +65,10 @@ int GraphicsApplication::onCreate()
 
 
 	//separate loading and adding to a scene
-	//scene->LoadObject("src/teapot_normals.obj", "teapot");
+	scene->LoadObject("src/teapot_normals.obj", "teapot");
 
-	//scene->getObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, 2.0f };
-	//scene->AddObject("teapot");
-
-	scene->LoadObject(new GLQuad, "surface");
-	scene->AddObject("surface");
+	scene->GetObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, 2.0f };
+	scene->AddObject("teapot");
 
 	//set initial light position
 	light_pos = { 0.0f, 0.0f, -2.0f };
@@ -101,15 +98,18 @@ int GraphicsApplication::onUpdate()
 		//clear screen & depth buffer
 		renderer->Clear();
 
+		//update the camera
+		scene->m_camera.update();
+
 		//handle user input and mouse pitch yaw
 		processInput(m_window);
 
 		//rotate the teapot
-		//scene->getObjectByName("teapot")->transformation->RotateX(0.015f * frame_time);
-		//scene->getObjectByName("teapot")->transformation->RotateY(0.015f * frame_time);
-		//scene->getObjectByName("teapot")->transformation->RotateZ(0.015f * frame_time);
+		//scene->GetObjectByName("teapot")->transformation->RotateX(0.015f * frame_time);
+		//scene->GetObjectByName("teapot")->transformation->RotateY(0.015f * frame_time);
+		//scene->GetObjectByName("teapot")->transformation->RotateZ(0.015f * frame_time);
 
-		//scene->getObjectByName("surface")->transformation->RotateX(0.015f * frame_time);
+		//scene->GetObjectByName("surface")->transformation->RotateX(0.015f * frame_time);
 
 		//pass the scene to the renderer to draw
 		renderer->DrawScene(*scene);

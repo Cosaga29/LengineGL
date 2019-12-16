@@ -5,8 +5,8 @@
 #include "memory"
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
-#include "../MeshLoader.hpp"
-#include "GLData.hpp"
+#include "../ObjMeshLoader.h"
+#include "Mesh.h"
 
 /*
 Condensed old "Model" class into this VAO class. 
@@ -31,11 +31,11 @@ public:
 	unsigned int indicies;
 	unsigned int attributes;
 	bool hasLayout;
-	std::unique_ptr<GLData> model_data;
+	std::unique_ptr<Mesh> model_data;
 
 	//TODO: set multithread to load this file in background
 	VertexArray(const std::string& filename); //create vertex array based on a model file
-	VertexArray(struct GLData* data); //create vertex array from simple gl data
+	VertexArray(struct Mesh* data); //create vertex array from simple gl data
 
 	void Bind();
 	void Unbind();

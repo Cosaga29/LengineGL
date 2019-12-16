@@ -6,13 +6,20 @@ Scene::Scene()
 	m_camera.eye_pos = { 0.0f, 0.0f, 0.0f };
 	m_camera.look_at_pos = { 2.0f, 1.0f, 3.0f };
 	m_camera.up_axis = { 0.0f, 1.0f, 0.0f };
-
-	m_light.color = { 1.0f, 1.0f, 1.0f }; //default white light
-	m_light.position = { 0.0f, 0.0f, -2.0f };
-
+	
 	//set up a default perspective (can be changed with SetPerspective
 	SetPerspective();
 
+	m_camera.update();
+	
+	m_light.color = { 1.0f, 1.0f, 1.0f }; //default white light
+	m_light.position = { 0.0f, 0.0f, -2.0f };
+
+}
+
+Scene::~Scene()
+{
+	ClearScene();
 }
 
 /*
@@ -24,19 +31,11 @@ bool Scene::LoadObject(const std::string& model_file, const std::string& name, c
 
 	printf("Scene:\nLoading Object [%i]:\t%s\n%s\tFragment Shader: %s\n\tVertex Shader: %s\n\n\n", objects_loaded.size(), name.c_str(), model_file.c_str(), frag_shader.c_str(), vert_shader.c_str());
 
-	//create vao from the model_file given
-	VertexArray* model_vao = new VertexArray(model_file.c_str());
-	model_vao->initLayout();
-
-	//default transformation
-	Transform* transformation = new Transform();
-
-	//shader specified
-	Shader* model_shader = new Shader(frag_shader, vert_shader);
-
-	//add the objects loaded
-	objects_loaded.push_back(new SceneObject(model_vao, transformation, model_shader));
-	model_shader->Unbind();
+	//create scene object from file
+	objects_loaded.push_back
+	(
+		new SceneObject(new VertexArray(model_file.c_str()), new Transform(), new Shader(frag_shader, vert_shader))
+	);
 
 	//now that scene object has been added, make references to it by name
 	name_obj_map[name] = objects_loaded.back();
@@ -49,32 +48,21 @@ bool Scene::LoadObject(const std::string& model_file, const std::string& name, c
 Add an object to the loaded objects containers. fragshader and vert shader are optional
 The object must be made visible and added to the visible objects container
 */
-bool Scene::LoadObject(GLData* raw_obj, const std::string& name, const std::string& frag_shader, const std::string& vert_shader)
+bool Scene::LoadObject(Mesh* raw_obj, const std::string& name, const std::string& frag_shader, const std::string& vert_shader)
 {
 
 	//printf("Scene:\nLoading Object [%i]:\t%s\n%s\tFragment Shader: %s\n\tVertex Shader: %s\n\n\n", objects_loaded.size(), name.c_str(), model_file.c_str(), frag_shader.c_str(), vert_shader.c_str());
-
-	//create vao from the model_file given
-	VertexArray* model_vao = new VertexArray(raw_obj);
-	model_vao->initLayout();
-
-	//default transformation
-	Transform* transformation = new Transform();
-
-	//shader specified
-	Shader* model_shader = new Shader(frag_shader, vert_shader);
-
-	//add the objects loaded
-	objects_loaded.push_back(new SceneObject(model_vao, transformation, model_shader));
-	model_shader->Unbind();
+		//create scene object from file
+	objects_loaded.push_back
+	(
+		new SceneObject(new VertexArray(raw_obj), new Transform(), new Shader(frag_shader, vert_shader))
+	);
 
 	//now that scene object has been added, make references to it by name
 	name_obj_map[name] = objects_loaded.back();
 
 	return true;
 }
-
-
 
 
 /*
@@ -84,7 +72,7 @@ bool Scene::AddObject(const std::string& name)
 {
 	if (isLoaded(name))
 	{
-		visible_objects.push_back(getObjectByName(name));
+		visible_objects.push_back(GetObjectByName(name));
 	}
 
 	return false;
@@ -98,6 +86,25 @@ bool Scene::RemoveObject(const std::string& name)
 	return false;
 }
 
+void Scene::ClearScene()
+{
+	for (unsigned i = 0; i < objects_loaded.size(); i++)
+	{
+		delete objects_loaded[i];
+	}
+	for (unsigned i = 0; i < visible_objects.size(); i++)
+	{
+		if (visible_objects[i])
+		{
+			delete visible_objects[i];
+		}
+	}
+
+	visible_objects.clear();
+	objects_loaded.clear();
+
+}
+
 bool Scene::AddShader(std::string& frag_shader, std::string& vert_shader)
 {
 	return true;
@@ -106,21 +113,18 @@ bool Scene::AddShader(std::string& frag_shader, std::string& vert_shader)
 void Scene::SetPerspective(float fov, float aspectRatio, float zNear, float zFar)
 {
 
-	this->m_camera.fov = fov;
-	this->m_camera.aspect_ratio = aspectRatio;
-	this->m_camera.zNear = zNear;
-	this->m_camera.zFar = zFar;
+	m_camera.SetPerspective(fov, aspectRatio, zNear, zFar);
 
 }
 
-SceneObject* Scene::getObjectByName(const std::string& object_name)
+SceneObject* Scene::GetObjectByName(const std::string& object_name)
 {
 	// TODO: insert return statement here
 	return name_obj_map[object_name];
 
 }
 
-SceneObject* Scene::getObjectById(Object_ID)
+SceneObject* Scene::GetObjectById(Object_ID)
 {
 	// TODO: insert return statement here
 	return 0;
