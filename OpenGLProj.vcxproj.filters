@@ -59,9 +59,6 @@
     <ClInclude Include="src\Graphics3DMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gl_abstractions\VertexBuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -83,9 +80,6 @@
     <ClInclude Include="gl_abstractions\Texture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gl_abstractions\GLLogger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -101,9 +95,6 @@
     <ClInclude Include="gl_abstractions\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneRenderer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -111,6 +102,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SceneObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

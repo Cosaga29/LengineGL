@@ -2,9 +2,9 @@
 
 #include <chrono>
 
-#include "Renderer.hpp"
-#include "Application.hpp"
-#include "Scene.hpp"
+#include "SceneRenderer.h"
+#include "Application.h"
+#include "Scene.h"
 #include "gl_abstractions/GLLine.hpp"
 #include "gl_abstractions/GLQuad.hpp"
 

@@ -1,7 +1,4 @@
-#pragma once
-#include <iostream>
-#include "Renderer.hpp"
-
+#include "SceneRenderer.h"
 
 Renderer::Renderer()
 {

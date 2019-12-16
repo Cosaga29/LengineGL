@@ -2,8 +2,9 @@
 #include <glew.h>
 #include <string>
 #include <queue>
-#include "Scene.hpp"
+#include <iostream>
 #include <functional>
+#include "Scene.h"
 
 
 /*
@@ -23,7 +24,7 @@ public:
 
 	Renderer();
 	void DrawObj(const Scene& scene, const SceneObject& obj) const;
-	void DrawScene(Scene& scene);
+	void DrawScene(const Scene& scene);
 	void Clear() const;
 
 };

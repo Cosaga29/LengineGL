@@ -1,4 +1,4 @@
-#include "Application.hpp"
+#include "Application.h"
 
 
 Application::Application(int width, int height) :

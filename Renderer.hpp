@@ -2,9 +2,9 @@
 #include <glew.h>
 #include <string>
 #include <queue>
-#include "Scene.hpp"
 #include <functional>
 
+#include "Scene.h"
 
 /*
 Class to handle creation of openGL calls and binds to render data to the screen.
