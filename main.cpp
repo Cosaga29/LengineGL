@@ -42,11 +42,10 @@ public:
 private:
 
 	void inline processInput(GLFWwindow* window);
-
 	virtual inline void updateWindowHeader() override;
 
+	/*Ran during class initialization*/
 	virtual int onCreate() override;
-
 	/*Ran every frame*/
 	virtual int onUpdate() override;
 
@@ -62,13 +61,12 @@ int GraphicsApplication::onCreate()
 	scene = new Scene();
 	renderer = new Renderer();
 
-
-
 	//separate loading and adding to a scene
 	scene->LoadObject("src/teapot_normals.obj", "teapot");
-
 	scene->GetObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, 2.0f };
 	scene->AddObject("teapot");
+	scene->GetObjectByName("teapot")->transformation->UpdateModel();
+
 
 	//set initial light position
 	light_pos = { 0.0f, 0.0f, -2.0f };
@@ -113,7 +111,6 @@ int GraphicsApplication::onUpdate()
 
 		//pass the scene to the renderer to draw
 		renderer->DrawScene(*scene);
-
 
 		glfwSwapBuffers(m_window);
 		updateWindowHeader();

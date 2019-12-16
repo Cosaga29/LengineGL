@@ -15,6 +15,12 @@ Scene::Scene()
 	m_light.color = { 1.0f, 1.0f, 1.0f }; //default white light
 	m_light.position = { 0.0f, 0.0f, -2.0f };
 
+	//create global default shader and bind the current proj and view matricies
+	m_globalShader = new Shader(DEFAULT_FRAG_SHADER, DEFAULT_VERT_SHADER);
+	m_globalShader->SetUniformMat4fv("proj_matrix", m_camera.proj_matrix);
+	m_globalShader->SetUniformMat4fv("view_matrix", m_camera.view_matrix);
+
+
 }
 
 Scene::~Scene()
