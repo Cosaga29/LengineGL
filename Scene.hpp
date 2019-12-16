@@ -2,17 +2,6 @@
 
 #include <unordered_map>
 #include <map>
-#include <memory>
-#include <glew.h>
-#include "outside/glm/glm.hpp"
-#include "outside/glm/gtc/matrix_transform.hpp"
-#include "outside/glm/gtc/type_ptr.hpp"
-#include "outside/glm/gtc/quaternion.hpp"
-#include "outside/glm/gtx/quaternion.hpp"
-#include "gl_abstractions/Shader.hpp"
-#include "gl_abstractions/VertexArray.hpp"
-#include "gl_abstractions/Mesh.h"
-#include "gl_abstractions/GLLine.hpp"
 #include "Camera.h"
 #include "Transform.h"
 #include "SceneObject.h"
@@ -30,14 +19,11 @@
 typedef unsigned Object_ID;
 typedef unsigned Shader_ID;
 
-
 struct DiffuseLight
 {
 	glm::vec3 color;
 	glm::vec3 position;
 };
-
-
 
 /*
 
