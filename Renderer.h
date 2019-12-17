@@ -23,7 +23,6 @@ private:
 public:
 
 	Renderer();
-	void DrawObj(const Scene& scene, const SceneObject& obj) const;
 	void DrawScene(const Scene& scene);
 	void Clear() const;
 
