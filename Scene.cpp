@@ -1,5 +1,8 @@
 #include "Scene.h"
 
+
+Shader* Scene::m_globalShader;
+
 Scene::Scene()
 {
 	//stet up init position for camera
@@ -20,7 +23,6 @@ Scene::Scene()
 	m_globalShader->SetUniformMat4fv("proj_matrix", m_camera.proj_matrix);
 	m_globalShader->SetUniformMat4fv("view_matrix", m_camera.view_matrix);
 
-
 }
 
 Scene::~Scene()
@@ -32,11 +34,24 @@ Scene::~Scene()
 Add an object to the loaded objects containers. fragshader and vert shader are optional
 The object must be made visible and added to the visible objects container
 */
-bool Scene::LoadObject(const std::string& model_file, const std::string& name, const std::string& frag_shader, const std::string& vert_shader)
+bool Scene::LoadObject(const std::string& model_file, const std::string& name, LOAD_FLAGS flags, const std::string& frag_shader, const std::string& vert_shader)
 {
 
-	printf("Scene:\nLoading Object [%i]:\t%s\n%s\tFragment Shader: %s\n\tVertex Shader: %s\n\n\n", objects_loaded.size(), name.c_str(), model_file.c_str(), frag_shader.c_str(), vert_shader.c_str());
+	//if using the pre-loaded default shader...
+	if (flags == DEFAULT)
+	{
+		//create scene object from file
+		objects_loaded.push_back
+		(
+			new SceneObject(new VertexArray(model_file.c_str()), new Transform(), m_globalShader)
+		);
+		//now that scene object has been added, make references to it by name
+		name_obj_map[name] = objects_loaded.back();
+		
+		return true;
+	}
 
+	printf("Scene:\nLoading Object [%i]:\t%s\n%s\tFragment Shader: %s\n\tVertex Shader: %s\n\n\n", objects_loaded.size(), name.c_str(), model_file.c_str(), frag_shader.c_str(), vert_shader.c_str());
 	//create scene object from file
 	objects_loaded.push_back
 	(
@@ -48,6 +63,7 @@ bool Scene::LoadObject(const std::string& model_file, const std::string& name, c
 
 	return true;
 }
+
 
 
 /*

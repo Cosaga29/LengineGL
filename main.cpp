@@ -62,10 +62,20 @@ int GraphicsApplication::onCreate()
 	renderer = new Renderer();
 
 	//separate loading and adding to a scene
-	scene->LoadObject("src/teapot_normals.obj", "teapot");
+	scene->LoadObject("src/teapot_normals.obj", "teapot", DEFAULT);
+	scene->LoadObject("src/teapot_normals.obj", "teapot2", DEFAULT);
+
 	scene->GetObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, 2.0f };
+	scene->GetObjectByName("teapot2")->transformation->translation = { 0.0f, 0.0f, -2.0f };
+
+	scene->GetObjectByName("teapot")->mode = LINES;
+	scene->GetObjectByName("teapot2")->mode = LINES;
+
 	scene->AddObject("teapot");
-	scene->GetObjectByName("teapot")->transformation->UpdateModel();
+	scene->GetObjectByName("teapot")->UpdateObject();
+
+	scene->AddObject("teapot2");
+	scene->GetObjectByName("teapot2")->UpdateObject();
 
 
 	//set initial light position
@@ -92,7 +102,6 @@ int GraphicsApplication::onUpdate()
 		frame_start = std::chrono::high_resolution_clock::now();
 		frame_time = std::chrono::duration_cast<std::chrono::duration<float>>(frame_start - frame_end).count(); //used for FPS calculation
 		frame_end = frame_start;
-
 		//clear screen & depth buffer
 		renderer->Clear();
 
@@ -106,8 +115,9 @@ int GraphicsApplication::onUpdate()
 		//scene->GetObjectByName("teapot")->transformation->RotateX(0.015f * frame_time);
 		//scene->GetObjectByName("teapot")->transformation->RotateY(0.015f * frame_time);
 		//scene->GetObjectByName("teapot")->transformation->RotateZ(0.015f * frame_time);
+		//scene->GetObjectByName("teapot")->UpdateObject();
 
-		//scene->GetObjectByName("surface")->transformation->RotateX(0.015f * frame_time);
+
 
 		//pass the scene to the renderer to draw
 		renderer->DrawScene(*scene);

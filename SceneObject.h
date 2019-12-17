@@ -33,7 +33,9 @@ struct SceneObject
 
 	std::unique_ptr<VertexArray> vao;
 	std::unique_ptr<Transform> transformation;
-	std::unique_ptr<Shader> shader;
+	std::shared_ptr<Shader> shader;
+
+	inline void UpdateObject() { transformation->UpdateModel(); };
 
 	DRAW_MODE mode;
 	bool isVisible;

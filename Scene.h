@@ -25,6 +25,12 @@ struct DiffuseLight
 	glm::vec3 position;
 };
 
+
+enum LOAD_FLAGS
+{
+	DEFAULT = 0
+};
+
 /*
 
 
@@ -75,10 +81,11 @@ public:
 
 	Camera m_camera;
 	DiffuseLight m_light;
-	Shader* m_globalShader;
+	static Shader* m_globalShader;
 
 	//add an object from a model file, a frag and vert shader, and give it a nickname
-	bool LoadObject(const std::string& model_file, const std::string& name, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
+	bool LoadObject(const std::string& model_file, const std::string& name, LOAD_FLAGS flags = DEFAULT, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
+	//bool LoadObject(const std::string& model_file, const std::string& name, Shader* shader = m_globalShader);
 	bool LoadObject(Mesh* raw_obj, const std::string& name, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
 	
 	bool AddObject(const std::string& name);
@@ -86,7 +93,7 @@ public:
 	void ClearScene();
 
 	bool AddShader(std::string& frag_shader, std::string& vert_shader);
-	void SetPerspective(float fov = 90.0f, float aspectRatio = 1.333, float fNear = 0.1f, float fFar = 1000.0f);
+	void SetPerspective(float fov = 65.0f, float aspectRatio = 1.333, float fNear = 0.1f, float fFar = 1000.0f);
 	
 	inline bool isLoaded(const std::string& name) { return (name_obj_map.find(name) == name_obj_map.end()) ? 0 : 1; }
 	inline void SetGlobalLightPos(const glm::vec3& light_pos = { 0.0f, 3.0f, 0.0f }) { m_light.position = light_pos; }
