@@ -7,6 +7,9 @@
 #include "Scene.h"
 
 
+class Renderer;
+
+
 /*
 Class to handle creation of openGL calls and binds to render data to the screen.
 
@@ -25,5 +28,6 @@ public:
 	Renderer();
 	void DrawScene(const Scene& scene);
 	void Clear() const;
+
 
 };
