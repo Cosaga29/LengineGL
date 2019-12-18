@@ -6,15 +6,6 @@
 #include "Transform.h"
 #include "SceneObject.h"
 
-#ifndef DEFAULT_FRAG_SHADER
-#define DEFAULT_FRAG_SHADER "shaders/default/default_frag.shader"
-#endif
-
-#ifndef DEFAULT_VERT_SHADER
-#define DEFAULT_VERT_SHADER "shaders/default/default_vert.shader"
-#endif
-
-
 //this is the VertexArray's m_rendererID
 typedef unsigned Object_ID;
 typedef unsigned Shader_ID;
