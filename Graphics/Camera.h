@@ -2,9 +2,9 @@
 
 #include <glew.h>
 
-#include "outside/glm/glm.hpp"
-#include "outside/glm/gtc/matrix_transform.hpp"
-#include "outside/glm/gtc/type_ptr.hpp"
+#include "../outside/glm/glm.hpp"
+#include "../outside/glm/gtc/matrix_transform.hpp"
+#include "../outside/glm/gtc/type_ptr.hpp"
 
 struct Camera
 {

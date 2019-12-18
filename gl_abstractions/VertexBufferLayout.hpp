@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Renderer.hpp"
+#include "../Graphics/Renderer.hpp"
 #include <cassert>
 /*
 Class that stores a particular layout for glVertexAttribPointer

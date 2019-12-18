@@ -6,8 +6,8 @@
 #include <fstream>
 #include <iostream>
 #include <map>
-#include "outside/glm/glm.hpp"
-#include "gl_abstractions/Mesh.h"
+#include "../outside/glm/glm.hpp"
+#include "../gl_abstractions/Mesh.h"
 
 /*
 Eventually this class will be referred to as the "model loader" as the Model class encapsulates the 

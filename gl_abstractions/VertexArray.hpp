@@ -5,7 +5,7 @@
 #include "memory"
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
-#include "../ObjMeshLoader.h"
+#include "../Graphics/ObjMeshLoader.h"
 #include "Mesh.h"
 
 /*

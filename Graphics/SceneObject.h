@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "gl_abstractions/VertexArray.hpp"
-#include "gl_abstractions/Shader.hpp"
+#include "../gl_abstractions/VertexArray.hpp"
+#include "../gl_abstractions/Shader.hpp"
 
 #include "Transform.h"
 
