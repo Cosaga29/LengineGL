@@ -4,6 +4,7 @@
 #include "../gl_abstractions/VertexArray.hpp"
 #include "../gl_abstractions/GlobalShader.h"
 #include "../gl_abstractions/Shader.hpp"
+#include "../gl_abstractions/Texture.hpp"
 
 #include "Transform.h"
 

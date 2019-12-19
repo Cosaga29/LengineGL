@@ -62,6 +62,7 @@ int GraphicsApplication::onCreate()
 	scene = new Scene();
 	renderer = new Renderer();
 
+
 	//separate loading and adding to a scene
 	scene->LoadObject("src/teapot_normals.obj", "teapot", DEFAULT);
 	scene->LoadObject("src/teapot_normals.obj", "teapot2", DEFAULT);
@@ -242,21 +243,10 @@ inline void GraphicsApplication::updateWindowHeader()
 
 int main() {
 
-	Player p;
-	Player p2;
-	p.PrintState();
-	p.acceleration = { 0.0, 0.0, 0.0 };
-	p.Move(0.5);
-	p.PrintState();
-	p.Move(0.5);
-	p.PrintState();
-
-	std::cout << p.name;
-	std::cout << p2.name;
 
 	//Application app(800, 600);
-	//GraphicsApplication app(800, 600);
-	//app.run();
+	GraphicsApplication app(800, 600);
+	app.run();
 
 
 }

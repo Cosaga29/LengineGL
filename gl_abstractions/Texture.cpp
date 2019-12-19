@@ -9,26 +9,9 @@ Texture::Texture(const std::string& path)
 	stbi_set_flip_vertically_on_load(1);	//needed because PNG is produced from top left to bottom right; openGL expects bottom left = 0,0
 	//data where the pixel data is actually stored
 	m_LocalBuffer = stbi_load(path.c_str(), &m_width, &m_height, &m_BPP, 4);
-	
-	std::cout << std::hex;
-	//print out byte data for testing
-	//write a white line at the bottom of the picture to be displayed
-	int pixelWidth = 15;
-	for (unsigned i = 0; i < m_width * sizeof(unsigned int) * pixelWidth; i += 4) {
-		//red channel
-		m_LocalBuffer[i] = 0;
-		//green channel
-		m_LocalBuffer[i + 1] = 255;
-		//blue channel
-		m_LocalBuffer[i + 2] = 0;
-		//alpha channel
-		m_LocalBuffer[i + 3] = 255;
-	}
-
-	
 
 
-	printf("Texture Pixel Width:\t%i\nTexture Pixel Height:\t%i\nNumber of 8-bit components per pixel:\t%i\n", m_width, m_height, m_BPP);
+	//printf("Texture Pixel Width:\t%i\nTexture Pixel Height:\t%i\nNumber of 8-bit components per pixel:\t%i\n", m_width, m_height, m_BPP);
 	if (!m_LocalBuffer) {
 		std::cout << "Error loading texture" << std::endl;
 	}
@@ -88,19 +71,4 @@ void Texture::Bind(unsigned int slot) const
 void Texture::Unbind()
 {
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-}
-
-void Texture::Refresh()
-{
-	//give open gl data from local buffer
-	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_LocalBuffer));
-}
-
-/*
-Function to write raw byte data in buffer to a file for inspection
-*/
-void Texture::writeToFile() const
-{
-
-
 }

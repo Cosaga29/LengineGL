@@ -22,12 +22,8 @@ public:
 
 	void Bind(unsigned int slot = 0) const;
 	void Unbind();
-	void Refresh();
 
 	inline int GetWidth() const { return m_width; }
 	inline int GetHeight() const { return m_height; }
-
-	void writeToFile() const;
-
 
 };
