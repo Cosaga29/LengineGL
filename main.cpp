@@ -7,6 +7,7 @@
 #include "Graphics/Scene.h"
 #include "gl_abstractions/GLLine.hpp"
 #include "gl_abstractions/GLQuad.hpp"
+#include "Game/Player.h"
 
 
 
@@ -241,10 +242,21 @@ inline void GraphicsApplication::updateWindowHeader()
 
 int main() {
 
+	Player p;
+	Player p2;
+	p.PrintState();
+	p.acceleration = { 0.0, 0.0, 0.0 };
+	p.Move(0.5);
+	p.PrintState();
+	p.Move(0.5);
+	p.PrintState();
+
+	std::cout << p.name;
+	std::cout << p2.name;
 
 	//Application app(800, 600);
-	GraphicsApplication app(800, 600);
-	app.run();
+	//GraphicsApplication app(800, 600);
+	//app.run();
 
 
 }

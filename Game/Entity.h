@@ -19,20 +19,25 @@ public:
 	unsigned e_id;
 	std::string name;
 	std::unique_ptr<Mesh> m_mesh;
-	glm::vec3 position; //xyz
-	glm::vec3 velocity; 
 
+	glm::vec3 position; //xyz
+	glm::vec3 velocity;
+	glm::vec3 acceleration;
+
+	Entity();
 	Entity(const std::string model, const std::string name = "");
 	Entity(Mesh& entity, const std::string name = "");
 
+	inline void PrintState() { std::cout << position.x << position.y << position.z << std::endl; }
 	inline float GetSpeed() { return glm::length(velocity); };
 
-	virtual void move(glm::vec3& direction);
-	virtual void turn(glm::vec3& axis, float fTheta);
+	virtual void Move(float time);
+	virtual void Turn(glm::vec3& axis, float fTheta);
 
-	virtual void interact(const Entity& other) = 0;
-	virtual void attack(const Entity& other) = 0;
-	virtual void defend(const Entity& other) = 0;
+	virtual void Interact(const Entity& other) = 0;
+	virtual void Attack(const Entity& other) = 0;
+	virtual void Defend(const Entity& other) = 0;
+
 
 
 };
