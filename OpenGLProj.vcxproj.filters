@@ -131,6 +131,9 @@
     <ClInclude Include="gl_abstractions\GlobalTexShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\SceneLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="gl_abstractions\PixelBuffer.txt" />
