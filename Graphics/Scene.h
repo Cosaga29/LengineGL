@@ -73,6 +73,7 @@ public:
 	Camera m_camera;
 	DiffuseLight m_light;
 	static Shader* m_globalShader;
+	static Shader* m_globalTexShader;
 
 	//add an object from a model file, a frag and vert shader, and give it a nickname
 	bool LoadObject(const std::string& model_file, const std::string& name, LOAD_FLAGS flags = DEFAULT, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);

@@ -2,6 +2,7 @@
 
 
 Shader* Scene::m_globalShader;
+Shader* Scene::m_globalTexShader;
 
 Scene::Scene()
 {
@@ -16,12 +17,17 @@ Scene::Scene()
 	m_camera.update();
 	
 	m_light.color = { 1.0f, 1.0f, 1.0f }; //default white light
-	m_light.position = { 0.0f, 0.0f, -2.0f };
+	m_light.position = { 0.0f, 0.0f, -2.0f }; //default light position for scene
 
-	//create global default shader and bind the current proj and view matricies
-	m_globalShader = new GlobalTexShader();
+	//create global default shaders and bind the current proj and view matricies
+	m_globalShader = new GlobalShader();
+	m_globalTexShader = new GlobalTexShader();
+
 	m_globalShader->SetUniformMat4fv("proj_matrix", m_camera.proj_matrix);
 	m_globalShader->SetUniformMat4fv("view_matrix", m_camera.view_matrix);
+
+	m_globalTexShader->SetUniformMat4fv("proj_matrix", m_camera.proj_matrix);
+	m_globalTexShader->SetUniformMat4fv("view_matrix", m_camera.view_matrix);
 
 }
 
@@ -65,6 +71,9 @@ bool Scene::LoadObject(const std::string& model_file, const std::string& name, L
 }
 
 
+/*
+If loading an object that contains a texture
+*/
 bool Scene::LoadObject(const std::string& model_file, const std::string& name, const std::string& textureFile, LOAD_FLAGS flags, const std::string& frag_shader, const std::string& vert_shader)
 {
 
@@ -73,7 +82,7 @@ bool Scene::LoadObject(const std::string& model_file, const std::string& name, c
 		//create scene object from file
 		objects_loaded.push_back
 		(
-			new SceneObject(new VertexArray(model_file.c_str()), new Transform(), m_globalShader, new Texture(textureFile))
+			new SceneObject(new VertexArray(model_file.c_str()), new Transform(), m_globalTexShader, new Texture(textureFile))
 		);
 		//now that scene object has been added, make references to it by name
 		name_obj_map[name] = objects_loaded.back();

@@ -23,8 +23,9 @@ Each object passed to the renderer will have a
 */
 struct SceneObject
 {
+	//Constructor for scene object that does not have a texture
 	SceneObject(VertexArray* vao, Transform* transform, Shader* shader) :
-		vao(vao), transformation(transform), shader(shader), isVisible(1), mode(TRIANGLES)
+		vao(vao), transformation(transform), shader(shader), texture(nullptr), isVisible(1), mode(TRIANGLES)
 	{
 		if (!vao->hasLayout)
 		{
@@ -34,6 +35,7 @@ struct SceneObject
 		vao->Unbind();
 	}
 
+	//Constructor for scene object that does have a texture
 	SceneObject(VertexArray* vao, Transform* transform, Shader* shader, Texture* texture) :
 		vao(vao), transformation(transform), shader(shader), texture(texture), isVisible(1), mode(TRIANGLES)
 	{

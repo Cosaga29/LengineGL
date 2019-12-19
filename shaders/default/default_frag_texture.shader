@@ -23,10 +23,14 @@ void main()
 	vec3 lightColor;
 	lightColor.x = 1.0f; lightColor.y = 1.0f; lightColor.z = 1.0f;
 
+	//get texture color value
+	vec4 textureValue = vec4(texture(texture_uniform, fragTexCoord));
 	vec3 objectColor;
-	objectColor.x = 1.0f; objectColor.y = 1.0f; objectColor.z = 1.0f;
+	objectColor.x = textureValue.x;
+	objectColor.y = textureValue.y;
+	objectColor.z = textureValue.z;
 
-	vec3 ambient = ambient_value * lightColor;
+	vec3 ambient = ambient_value * lightColor * objectColor;
 
 	// diffuse 
 	vec3 norm = normalize(Normal);
@@ -37,7 +41,5 @@ void main()
 
 	vec3 result = (ambient + diffuse) * objectColor;
 
-	//outColor = vec4(result, 1.0f); //rgba
-
-	outColor = texture(texture_uniform, fragTexCoord);
+	outColor = vec4(result, 1.0f); //rgba
 }

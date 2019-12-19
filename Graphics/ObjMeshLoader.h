@@ -19,7 +19,6 @@ ONLY USE WITH .OBJ
 */
 
 
-
 struct vec3
 {
 	float x, y, z;
@@ -41,8 +40,6 @@ struct packedVertex
 		return memcmp((void*)this, &v2, sizeof(vec3) + sizeof(vec2) + sizeof(vec3)) > 0;
 	};
 };
-
-
 
 
 class MeshLoader

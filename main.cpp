@@ -69,21 +69,12 @@ int GraphicsApplication::onCreate()
 	scene->AddObject("donut");
 	scene->GetObjectByName("donut")->UpdateObject();
 
-	//separate loading and adding to a scene
-	//scene->LoadObject("src/teapot_normals.obj", "teapot", DEFAULT);
-	//scene->LoadObject("src/teapot_normals.obj", "teapot2", DEFAULT);
-	//
-	//scene->GetObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, 2.0f };
-	//scene->GetObjectByName("teapot2")->transformation->translation = { 0.0f, 0.0f, -2.0f };
-	//
-	//scene->GetObjectByName("teapot")->mode = LINES;
-	//scene->GetObjectByName("teapot2")->mode = LINES;
-	//
-	//scene->AddObject("teapot");
-	//scene->GetObjectByName("teapot")->UpdateObject();
-	//
-	//scene->AddObject("teapot2");
-	//scene->GetObjectByName("teapot2")->UpdateObject();
+	scene->LoadObject("src/teapot_normals.obj", "teapot", DEFAULT);
+	scene->GetObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, -5.0f };
+	scene->GetObjectByName("teapot")->mode = LINES;
+	scene->AddObject("teapot");
+	scene->GetObjectByName("teapot")->UpdateObject();
+
 
 
 	//set initial light position
