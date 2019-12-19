@@ -39,7 +39,9 @@ void Shader::SetUniform3fv(const std::string& name, const glm::vec3& vector_valu
 
 void Shader::SetUniform1i(const std::string& name, int value)
 {
+	this->Bind();
 	GLCall(glUniform1i(GetUniformLocation(name), value));
+	this->Unbind();
 }
 
 void Shader::SetUniform1f(const std::string& name, float value)

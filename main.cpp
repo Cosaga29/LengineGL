@@ -55,6 +55,8 @@ private:
 
 int GraphicsApplication::onCreate()
 {
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
 
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetKeyCallback(m_window, key_callback);
@@ -62,22 +64,26 @@ int GraphicsApplication::onCreate()
 	scene = new Scene();
 	renderer = new Renderer();
 
+	scene->LoadObject("src/Donut.obj", "donut", "src/Donut.png");
+	scene->GetObjectByName("donut")->transformation->translation = { 0.0f, 0.0f, 2.0f };
+	scene->AddObject("donut");
+	scene->GetObjectByName("donut")->UpdateObject();
 
 	//separate loading and adding to a scene
-	scene->LoadObject("src/teapot_normals.obj", "teapot", DEFAULT);
-	scene->LoadObject("src/teapot_normals.obj", "teapot2", DEFAULT);
-
-	scene->GetObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, 2.0f };
-	scene->GetObjectByName("teapot2")->transformation->translation = { 0.0f, 0.0f, -2.0f };
-
-	scene->GetObjectByName("teapot")->mode = LINES;
-	scene->GetObjectByName("teapot2")->mode = LINES;
-
-	scene->AddObject("teapot");
-	scene->GetObjectByName("teapot")->UpdateObject();
-
-	scene->AddObject("teapot2");
-	scene->GetObjectByName("teapot2")->UpdateObject();
+	//scene->LoadObject("src/teapot_normals.obj", "teapot", DEFAULT);
+	//scene->LoadObject("src/teapot_normals.obj", "teapot2", DEFAULT);
+	//
+	//scene->GetObjectByName("teapot")->transformation->translation = { 0.0f, 0.0f, 2.0f };
+	//scene->GetObjectByName("teapot2")->transformation->translation = { 0.0f, 0.0f, -2.0f };
+	//
+	//scene->GetObjectByName("teapot")->mode = LINES;
+	//scene->GetObjectByName("teapot2")->mode = LINES;
+	//
+	//scene->AddObject("teapot");
+	//scene->GetObjectByName("teapot")->UpdateObject();
+	//
+	//scene->AddObject("teapot2");
+	//scene->GetObjectByName("teapot2")->UpdateObject();
 
 
 	//set initial light position

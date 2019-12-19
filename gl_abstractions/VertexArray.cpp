@@ -54,16 +54,25 @@ int VertexArray::initLayout()
 
 	if (model_data->hasTexture)
 	{
-		glVertexAttribPointer(attributes, 2, GL_FLOAT, GL_FALSE, model_data->stride * sizeof(float), (void*)(2 * sizeof(float)));
+		glVertexAttribPointer(attributes, 2, GL_FLOAT, GL_FALSE, model_data->stride * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(attributes);
 		attributes++;
-	}
 
-	if (model_data->hasNormal)
+		if (model_data->hasNormal)
+		{
+			glVertexAttribPointer(attributes, 3, GL_FLOAT, GL_FALSE, model_data->stride * sizeof(float), (void*)(5 * sizeof(float)));
+			glEnableVertexAttribArray(attributes);
+			attributes++;
+		}
+	}
+	else
 	{
-		glVertexAttribPointer(attributes, 3, GL_FLOAT, GL_FALSE, model_data->stride * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(attributes);
-		attributes++;
+		if (model_data->hasNormal)
+		{
+			glVertexAttribPointer(attributes, 3, GL_FLOAT, GL_FALSE, model_data->stride * sizeof(float), (void*)(3 * sizeof(float)));
+			glEnableVertexAttribArray(attributes);
+			attributes++;
+		}
 	}
 
 	//unbind for now

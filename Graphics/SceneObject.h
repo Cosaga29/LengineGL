@@ -3,6 +3,7 @@
 
 #include "../gl_abstractions/VertexArray.hpp"
 #include "../gl_abstractions/GlobalShader.h"
+#include "../gl_abstractions/GlobalTexShader.h"
 #include "../gl_abstractions/Shader.hpp"
 #include "../gl_abstractions/Texture.hpp"
 
@@ -33,9 +34,21 @@ struct SceneObject
 		vao->Unbind();
 	}
 
+	SceneObject(VertexArray* vao, Transform* transform, Shader* shader, Texture* texture) :
+		vao(vao), transformation(transform), shader(shader), texture(texture), isVisible(1), mode(TRIANGLES)
+	{
+		if (!vao->hasLayout)
+		{
+			vao->initLayout();
+		}
+		shader->Unbind();
+		vao->Unbind();
+	}
+
 	std::unique_ptr<VertexArray> vao;
 	std::unique_ptr<Transform> transformation;
 	std::shared_ptr<Shader> shader;
+	std::unique_ptr<Texture> texture;
 
 	inline void UpdateObject() { transformation->UpdateModel(); };
 

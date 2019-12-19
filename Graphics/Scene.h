@@ -76,8 +76,9 @@ public:
 
 	//add an object from a model file, a frag and vert shader, and give it a nickname
 	bool LoadObject(const std::string& model_file, const std::string& name, LOAD_FLAGS flags = DEFAULT, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
-	//bool LoadObject(const std::string& model_file, const std::string& name, Shader* shader = m_globalShader);
 	bool LoadObject(Mesh* raw_obj, const std::string& name, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
+	bool LoadObject(const std::string& model_file, const std::string& name, const std::string& textureFile, LOAD_FLAGS flags = DEFAULT, const std::string& frag_shader = DEFAULT_FRAG_SHADER, const std::string& vert_shader = DEFAULT_VERT_SHADER);
+
 	
 	bool AddObject(const std::string& name);
 	bool RemoveObject(const std::string& name);

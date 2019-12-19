@@ -19,7 +19,7 @@ Scene::Scene()
 	m_light.position = { 0.0f, 0.0f, -2.0f };
 
 	//create global default shader and bind the current proj and view matricies
-	m_globalShader = new GlobalShader();
+	m_globalShader = new GlobalTexShader();
 	m_globalShader->SetUniformMat4fv("proj_matrix", m_camera.proj_matrix);
 	m_globalShader->SetUniformMat4fv("view_matrix", m_camera.view_matrix);
 
@@ -62,6 +62,25 @@ bool Scene::LoadObject(const std::string& model_file, const std::string& name, L
 	name_obj_map[name] = objects_loaded.back();
 
 	return true;
+}
+
+
+bool Scene::LoadObject(const std::string& model_file, const std::string& name, const std::string& textureFile, LOAD_FLAGS flags, const std::string& frag_shader, const std::string& vert_shader)
+{
+
+	if (flags == DEFAULT)
+	{
+		//create scene object from file
+		objects_loaded.push_back
+		(
+			new SceneObject(new VertexArray(model_file.c_str()), new Transform(), m_globalShader, new Texture(textureFile))
+		);
+		//now that scene object has been added, make references to it by name
+		name_obj_map[name] = objects_loaded.back();
+
+		return true;
+	}
+
 }
 
 

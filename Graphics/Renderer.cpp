@@ -15,6 +15,14 @@ void Renderer::DrawScene(const Scene& scene)
 		//upload camera data into shader
 		obj->shader->SetUniformMat4fv("proj_matrix", scene.m_camera.proj_matrix);
 		obj->shader->SetUniformMat4fv("view_matrix", scene.m_camera.view_matrix);
+		
+		//set texture if the object has one
+		if (obj->texture)
+		{
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, obj->texture->GetTexture());
+			obj->shader->SetUniform1i("texture_uniform", 0);
+		}
 
 		//fetch normal matrix and pass to shader
 		obj->shader->SetUniformMat4fv("normal_matrix", obj->transformation->normal_matrix);

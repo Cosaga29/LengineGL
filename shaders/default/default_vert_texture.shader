@@ -3,7 +3,11 @@
 
 
 layout(location = 0) in vec3 position;
-layout(location = 1) in vec3 normal;
+layout(location = 1) in vec2 vertTexCoord;
+layout(location = 2) in vec3 normal;
+
+uniform sampler2D texture_uniform;
+
 
 uniform mat4 rotateZ;
 uniform mat4 rotateX;
@@ -14,9 +18,13 @@ uniform mat4 proj_matrix;  //NEEDED
 uniform mat4 normal_matrix;
 
 out vec3 Normal;
+out vec2 fragTexCoord;
 out vec3 world_pos;
 
+
 void main() {
+
+	fragTexCoord = vertTexCoord;
 
 	world_pos = vec3(model_matrix * vec4(position, 1.0));
 
