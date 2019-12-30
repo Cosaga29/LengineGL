@@ -40,7 +40,7 @@ Mesh* MeshLoader::loadFromObj(const char* filename)
 		return 0;
 	}
 
-	std::map<std::string, int> mode_map;
+	ModeMap mode_map;
 	mode_map["v"] = 1;	//reading pos data
 	mode_map["f"] = 2;	//read face data
 	mode_map["vn"] = 3; //read normal data

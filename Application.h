@@ -30,6 +30,7 @@ void cursorPositionCallback(GLFWwindow* window, double x_pos, double y_pos);
 class Application
 {
 public:
+
 	double mouse_x;
 	double mouse_y;
 	float sensitivity;

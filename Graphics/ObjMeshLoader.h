@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include "../outside/glm/glm.hpp"
 #include "../gl_abstractions/Mesh.h"
 
@@ -18,6 +19,10 @@ This class still needs to be tested with textures
 ONLY USE WITH .OBJ
 */
 
+struct packedVertex;
+
+typedef std::map<struct packedVertex, unsigned int> VertexMap;
+typedef std::unordered_map<std::string, int> ModeMap;
 
 struct vec3
 {
@@ -61,8 +66,7 @@ public:
 	bool hasTexture = 1;
 	bool hasNormal = 1;
 
-	std::map<packedVertex, unsigned int> vert_map;	//one index'ed map of vertecies
-
+	VertexMap vert_map;	//one index'ed map of vertecies
 
 	MeshLoader();
 
