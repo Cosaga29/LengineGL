@@ -24,7 +24,7 @@ Entity::Entity(Mesh& mesh_model, const std::string name) :
 {
 }
 
-void Entity::Move(float time)
+void Entity::Update(float time)
 {
 //physics motion equations
 

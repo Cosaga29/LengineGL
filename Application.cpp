@@ -99,23 +99,26 @@ void cursorPositionCallback(GLFWwindow* window, double x_pos, double y_pos)
 	this_window->mouse_x = x_pos;
 	this_window->mouse_y = y_pos;
 
-
-	//change the values by the sensitivity value
-	x_difference *= this_window->sensitivity;
-	y_difference *= this_window->sensitivity;
-
-	//update the yaw and pitch angles 
-	this_window->yaw += x_difference;
-	this_window->pitch += y_difference;
-
-	if (this_window->pitch > 89.5f)
+	if (this_window->cursor_disabled)
 	{
-		this_window->pitch = 89.5f;
+		//change the values by the sensitivity value
+		x_difference *= this_window->sensitivity;
+		y_difference *= this_window->sensitivity;
+
+		//update the yaw and pitch angles 
+		this_window->yaw += x_difference;
+		this_window->pitch += y_difference;
+
+		if (this_window->pitch > 89.5f)
+		{
+			this_window->pitch = 89.5f;
+		}
+		if (this_window->pitch < -89.5f)
+		{
+			this_window->pitch = -89.5f;
+		}
 	}
-	if (this_window->pitch < -89.5f)
-	{
-		this_window->pitch = -89.5f;
-	}
+
 
 
 }

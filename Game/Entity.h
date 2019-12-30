@@ -31,7 +31,7 @@ public:
 	inline void PrintState() { std::cout << position.x << position.y << position.z << std::endl; }
 	inline float GetSpeed() { return glm::length(velocity); };
 
-	virtual void Move(float time);
+	virtual void Update(float time);
 	virtual void Turn(glm::vec3& axis, float fTheta);
 
 	virtual void Interact(const Entity& other) = 0;

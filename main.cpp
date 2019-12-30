@@ -203,6 +203,7 @@ void GraphicsApplication::processInput(GLFWwindow* window)
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+
 	if (key != GLFW_KEY_LEFT_ALT || action == GLFW_RELEASE) { return; }
 	Application* this_app = (Application*)glfwGetWindowUserPointer(window);
 	if (this_app->cursor_disabled)
@@ -240,6 +241,7 @@ inline void GraphicsApplication::updateWindowHeader()
 
 int main() {
 
+	
 
 	//Application app(800, 600);
 	GraphicsApplication app(800, 600);
