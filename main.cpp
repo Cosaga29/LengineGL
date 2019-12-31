@@ -7,7 +7,6 @@
 #include "Graphics/Scene.h"
 #include "gl_abstractions/GLLine.hpp"
 #include "gl_abstractions/GLQuad.hpp"
-#include "Game/Player.h"
 
 
 
